@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class Handler {
+public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public GeneralResponse handleException(Exception exception) {
         if (exception instanceof GlobalException e) {
