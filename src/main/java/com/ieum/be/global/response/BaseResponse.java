@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.http.ResponseEntity;
+import lombok.Setter;
 
 @Builder
 @Getter
@@ -22,12 +22,17 @@ public class BaseResponse<T> {
 
     @JsonProperty("data")
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Setter
     private T data;
 
     public BaseResponse(int code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
+    }
+
+    public static BaseResponse<?> of(GeneralResponse generalResponse) {
+        return new BaseResponse<>(generalResponse.getCode(), generalResponse.getMessage(), null);
     }
 
     @Override

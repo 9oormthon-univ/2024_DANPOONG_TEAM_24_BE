@@ -6,9 +6,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GlobalController {
+    @GetMapping("/")
+    public GeneralResponse index() {
+        return GeneralResponse.OK;
+    }
 
     @GetMapping("/health")
-    public GeneralResponse health() {
-        return GeneralResponse.OK;
+    public String health() {
+        return "Server is running";
     }
 }
