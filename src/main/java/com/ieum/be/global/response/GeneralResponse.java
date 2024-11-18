@@ -22,6 +22,14 @@ public enum GeneralResponse {
 
     NO_JWT_TOKEN(HttpStatus.NOT_ACCEPTABLE.value(), "No token provided"),
 
+    NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Resource not found"),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "User not found"),
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Post not found"),
+
+    USER_ALREADY_EXISTS(HttpStatus.CONFLICT.value(), "User already exists"),
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST.value(), "Wrong password"),
+
+    REQUEST_BODY_NOT_READABLE(HttpStatus.BAD_REQUEST.value(), "Request body not present"),
     /**
      * 5xx
      */

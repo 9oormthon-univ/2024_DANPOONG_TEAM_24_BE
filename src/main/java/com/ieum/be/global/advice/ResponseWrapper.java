@@ -21,6 +21,7 @@ public class ResponseWrapper implements ResponseBodyAdvice<Object> {
             @Nonnull MethodParameter returnType,
             @Nonnull Class<? extends HttpMessageConverter<?>> converterType
     ) {
+        // JSON으로 변환 가능한 경우에만 변환
         return MappingJackson2HttpMessageConverter.class.isAssignableFrom(converterType);
     }
 
@@ -41,6 +42,12 @@ public class ResponseWrapper implements ResponseBodyAdvice<Object> {
                     .message(generalResponse.getMessage())
                     .data(null)
                     .build();
+        }
+
+        if (body instanceof BaseResponse<?> baseResponse) {
+            response.setStatusCode(HttpStatusCode.valueOf(baseResponse.getCode()));
+
+            return baseResponse;
         }
 
         return BaseResponse.builder()
