@@ -7,11 +7,11 @@ import java.util.List;
 
 @Getter
 @Setter
-public class AiRecipeRequest {
+public class AiRecipeRequestDto {
     private String display;
     private List<OptionDto> value;
 
-    public AiRecipeRequest(String display, List<OptionDto> value) {
+    public AiRecipeRequestDto(String display, List<OptionDto> value) {
         this.display = display;
         this.value = value;
     }

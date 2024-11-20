@@ -1,9 +1,9 @@
 package com.ieum.be.domain.recipe.dto;
 
-public class AiRecipeResponse {
+public class AiRecipeResponseDto {
     private String recipeResult;
 
-    public AiRecipeResponse(String recipeResult) {
+    public AiRecipeResponseDto(String recipeResult) {
         this.recipeResult = recipeResult;
     }
 }

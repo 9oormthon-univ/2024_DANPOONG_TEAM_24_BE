@@ -38,6 +38,15 @@ dependencies {
 
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
+	// ChatGPT
+	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.4'
+	// Spring Boot Webflux for WebClient
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	// Jackson for JSON parsing
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	// Optional: Spring Boot Actuator for additional monitoring and health checks
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
