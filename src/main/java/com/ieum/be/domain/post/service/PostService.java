@@ -31,8 +31,8 @@ public class PostService {
         this.likeRepository = likeRepository;
     }
 
-    public GeneralResponse createPost(CreatePostDto createPostDto, Long userId) {
-        User user = this.userRepository.findById(userId)
+    public GeneralResponse createPost(CreatePostDto createPostDto, String email) {
+        User user = this.userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new GlobalException(GeneralResponse.USER_NOT_FOUND));
 
         Post post = Post.builder()
@@ -65,12 +65,12 @@ public class PostService {
         return comments.stream().map(CommentInfoDto::of).collect(Collectors.toList());
     }
 
-    public GeneralResponse likePost(Long postId, Long userId) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new GlobalException(GeneralResponse.USER_NOT_FOUND));
+    public GeneralResponse likePost(Long postId, String email) {
+        User user = this.userRepository.findUserByEmail(email).orElseThrow(() -> new GlobalException(GeneralResponse.USER_NOT_FOUND));
         Post post = this.postRepository.findById(postId).orElseThrow(() -> new GlobalException(GeneralResponse.POST_NOT_FOUND));
 
-        if (this.likeRepository.findLikeByUserIdAndPostId(userId, postId).isPresent()) {
-            Likes likes = this.likeRepository.findLikeByUserIdAndPostId(userId, postId).get();
+        if (this.likeRepository.findLikeByUserEmailAndPostId(email, postId).isPresent()) {
+            Likes likes = this.likeRepository.findLikeByUserEmailAndPostId(email, postId).get();
 
             this.likeRepository.delete(likes);
 

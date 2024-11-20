@@ -25,8 +25,8 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public GeneralResponse createComment(CreateCommentDto createCommentDto, Long userId) {
-        User user = this.userRepository.findById(userId)
+    public GeneralResponse createComment(CreateCommentDto createCommentDto, String email) {
+        User user = this.userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new GlobalException(GeneralResponse.USER_NOT_FOUND));
 
         Post post = this.postRepository.findById(createCommentDto.postId())
