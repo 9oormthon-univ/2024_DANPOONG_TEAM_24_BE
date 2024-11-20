@@ -1,42 +1,44 @@
 package com.ieum.be.domain.store.controller;
 
 import com.ieum.be.domain.store.service.StoreService;
-import com.ieum.be.domain.category.dto.CategoryDto;
 import com.ieum.be.domain.store.dto.StoreDto;
 import com.ieum.be.domain.store.dto.StoreInfoDto;
+import com.ieum.be.global.response.GeneralResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/stores")
 public class StoreController {
-
     private final StoreService storeService;
 
     public StoreController(StoreService storeService) {
         this.storeService = storeService;
     }
 
-    @GetMapping("/category")
-    public ResponseEntity<List<CategoryDto>> getCategories() {
-        return ResponseEntity.ok(storeService.getCategories());
-    }
-
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<StoreDto>> getRestaurantsByCategory(@PathVariable Long categoryId) {
-        return ResponseEntity.ok(storeService.getStoresByCategory(categoryId));
+    public ResponseEntity<?> getStoresByCategoryId(@PathVariable Integer categoryId) {
+        List<StoreDto> stores = storeService.getStoresByCategoryId(categoryId);
+        return ResponseEntity.ok(stores);
     }
 
-    @GetMapping
-    public ResponseEntity<List<StoreDto>> getRestaurants(@RequestParam Map<String, String> options) {
-        return ResponseEntity.ok(storeService.getStoresByOptions(options));
-    }
+    /*@GetMapping
+    public ResponseEntity<?> getStoresByOptions(@RequestParam(required = false) String options) {
+        try {
+            List<StoreDto> stores = storeService.getStoresByOptions(options);
+            return ResponseEntity.ok(new GeneralResponse<>(HttpStatus.OK.value(), stores));
+        } catch (UnsupportedOperationException e) {
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+                    .body(new GeneralResponse<>(HttpStatus.NOT_IMPLEMENTED.value(), e.getMessage()));
+        }
+    }*/
 
     @GetMapping("/{storeId}")
-    public ResponseEntity<StoreInfoDto> getRestaurantDetails(@PathVariable Long storeId) {
-        return ResponseEntity.ok(storeService.getStoreDetails(storeId));
+    public ResponseEntity<?> getStoreById(@PathVariable Integer storeId) {
+        StoreInfoDto storeInfo = storeService.getStoreById(storeId);
+        return ResponseEntity.ok(storeInfo);
     }
 }
