@@ -1,7 +1,11 @@
 package com.ieum.be.domain.recipe.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "recipe")
 public class Recipe {
@@ -24,7 +28,7 @@ public class Recipe {
     private String keywords;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "convenience_store", nullable = false)
+    @Column(name = "convenience_store")
     private ConvenienceStoreType convenienceStore;
 
     public Recipe(Integer recipeId, String recipeName, String description, String priceRange, String keywords, ConvenienceStoreType convenienceStore) {

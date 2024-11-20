@@ -1,30 +1,41 @@
 package com.ieum.be.domain.recipe.service;
 
+import com.ieum.be.domain.recipe.dto.*;
+import com.ieum.be.domain.recipe.entity.Recipe;
+import com.ieum.be.domain.recipe.repository.RecipeRepository;
+import com.ieum.be.global.response.GeneralResponse;
+import com.ieum.be.global.response.GlobalException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@Transactional
 public class RecipeService {
-    /*private final RecipeRepository recipeRepository;
-    private final OptionRepository optionRepository;
+    private final RecipeRepository recipeRepository;
 
-    public RecipeService(RecipeRepository recipeRepository, OptionRepository optionRepository) {
+    public RecipeService(RecipeRepository recipeRepository) {
         this.recipeRepository = recipeRepository;
-        this.optionRepository = optionRepository;
     }
 
-    public RecipeDto getRecipeRecommendation(Long recipeId) {
-        // 추천 레시피 반환
+    // 추천 레시피 조회
+    public RecipeDto getRecipeById(Integer recipeId) {
+        Recipe recipe = recipeRepository.findRecipeByRecipeId(recipeId)
+                .orElseThrow(() -> new GlobalException(GeneralResponse.NOT_FOUND));
+
+        return new RecipeDto(
+                recipe.getRecipeId(),
+                recipe.getRecipeName(),
+                recipe.getDescription()
+        );
     }
 
-    public List<RecipeDto> getRecipeRecommendations() {
-        // 추천 레시피 리스트 반환
+    // 추천 레시피 리스트 조회
+    public List<RecipeListDto> getAllRecommendedRecipes() {
+        List<Recipe> recipes = recipeRepository.findTop10ByOrderByRecipeIdDesc();
+        return recipes.stream()
+                .map(recipe -> new RecipeListDto(recipe.getRecipeId(), recipe.getRecipeName()))
+                .toList();
     }
-
-    public List<OptionDto> getRecipeOptions() {
-        // 레시피 옵션 정보 반환
-    }
-
-    public RecipeDto generateRecipe(RecipeDto recipeDto) {
-        // AI 레시피 생성 로직
-    }*/
 }

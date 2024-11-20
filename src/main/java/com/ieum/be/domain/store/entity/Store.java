@@ -3,10 +3,14 @@ package com.ieum.be.domain.store.entity;
 import com.ieum.be.domain.category.entity.Category;
 import com.ieum.be.domain.filteredStore.entity.FilteredStore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "store")
 public class Store {
