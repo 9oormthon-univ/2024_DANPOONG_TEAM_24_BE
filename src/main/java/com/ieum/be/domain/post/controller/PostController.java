@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
 
@@ -31,7 +31,7 @@ public class PostController {
         return this.postService.getRecentPosts();
     }
 
-    @GetMapping("/popular")
+    @GetMapping("/latest")
     public List<PostInfoDto> getPopularPosts() {
         return this.postService.getPopularPosts();
     }

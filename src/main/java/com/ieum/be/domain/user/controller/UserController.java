@@ -17,7 +17,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public GeneralResponse createUser(@Valid @RequestBody CreateUserDto createUserDto) {
         return this.userService.createUser(createUserDto);
     }
