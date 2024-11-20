@@ -6,6 +6,8 @@ import com.ieum.be.global.response.GeneralResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
@@ -16,7 +18,12 @@ public class CommentController {
     }
 
     @PostMapping
-    public GeneralResponse createComment(@Valid @RequestBody CreateCommentDto createCommentDto, @RequestHeader("X-USER-ID") Long userId) {
-        return this.commentService.createComment(createCommentDto, userId);
+    public GeneralResponse createComment(@Valid @RequestBody CreateCommentDto createCommentDto, Principal principal) {
+        return this.commentService.createComment(createCommentDto, principal.getName());
+    }
+
+    @DeleteMapping("/{commentId}")
+    public GeneralResponse deleteComment(@PathVariable Long commentId, Principal principal) {
+        return this.commentService.deleteComment(commentId, principal.getName());
     }
 }

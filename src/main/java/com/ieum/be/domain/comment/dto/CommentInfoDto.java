@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 
 @Builder
 public class CommentInfoDto {
+    @JsonProperty("comment_id")
+    private Long commentId;
+
     @JsonProperty("author")
     private String author;
 
@@ -19,6 +22,7 @@ public class CommentInfoDto {
 
     public static CommentInfoDto of(Comment comment) {
         return CommentInfoDto.builder()
+                .commentId(comment.getCommentId())
                 .author(comment.getUser().getName())
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt())

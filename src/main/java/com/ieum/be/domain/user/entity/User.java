@@ -23,9 +23,9 @@ public class User {
     private String name;
 
     @Getter
-    @Column(name = "password")
-    private String password;
-
+    @Column(name = "user_email")
+    private String email;
+    
     @Getter
     @Column(name = "profile_url")
     private String profileUrl;

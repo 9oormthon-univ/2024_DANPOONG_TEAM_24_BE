@@ -25,8 +25,8 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public GeneralResponse createComment(CreateCommentDto createCommentDto, Long userId) {
-        User user = this.userRepository.findById(userId)
+    public GeneralResponse createComment(CreateCommentDto createCommentDto, String email) {
+        User user = this.userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new GlobalException(GeneralResponse.USER_NOT_FOUND));
 
         Post post = this.postRepository.findById(createCommentDto.postId())
@@ -39,6 +39,19 @@ public class CommentService {
                 .build();
 
         this.commentRepository.save(comment);
+
+        return GeneralResponse.OK;
+    }
+
+    public GeneralResponse deleteComment(Long commentId, String email) {
+        Comment comment = this.commentRepository.findCommentByCommentId(commentId)
+                .orElseThrow(() -> new GlobalException(GeneralResponse.COMMENT_NOT_FOUND));
+
+        if (!comment.getUser().getEmail().equals(email)) {
+            throw new GlobalException(GeneralResponse.FORBIDDEN);
+        }
+
+        this.commentRepository.delete(comment);
 
         return GeneralResponse.OK;
     }

@@ -3,7 +3,9 @@ package com.ieum.be.domain.post.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ieum.be.domain.comment.dto.CommentInfoDto;
 import com.ieum.be.domain.post.entity.Post;
+import com.ieum.be.domain.post.entity.PostCategory;
 import lombok.Builder;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,9 +35,16 @@ public class PostInfoDto {
 
     @JsonProperty("like_user")
     private List<String> likeUser;
+    
+    @Setter
+    @JsonProperty("liked_by_me")
+    private Boolean likedByMe;
 
     @JsonProperty("comments")
     private List<CommentInfoDto> comments;
+
+    @JsonProperty("post_category")
+    private String categoryName;
 
     public static PostInfoDto of(Post post) {
         return PostInfoDto.builder()
@@ -48,6 +57,7 @@ public class PostInfoDto {
                 .likes(post.getLikes().size())
                 .likeUser(post.getLikes().stream().map(like -> like.getUser().getName()).toList())
                 .comments(post.getComments().stream().map(CommentInfoDto::of).toList())
+                .categoryName(post.getPostCategory().getCategoryName())
                 .build();
     }
 }

@@ -6,6 +6,8 @@ spring:
   profiles:
     include:
       - mysql
+      - kakao
+      - jwt
 
 server:
   port: 3000

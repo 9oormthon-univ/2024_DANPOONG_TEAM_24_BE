@@ -2,6 +2,7 @@ package com.ieum.be.domain.post.controller;
 
 import com.ieum.be.domain.comment.dto.CommentInfoDto;
 import com.ieum.be.domain.post.dto.CreatePostDto;
+import com.ieum.be.domain.post.dto.PostCategoryDto;
 import com.ieum.be.domain.post.dto.PostInfoDto;
 import com.ieum.be.domain.post.entity.Post;
 import com.ieum.be.domain.post.service.PostService;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,27 +24,42 @@ public class PostController {
     }
 
     @PostMapping
-    public GeneralResponse createPost(@Valid @RequestBody CreatePostDto createPostDto, @RequestHeader("X-USER-ID") Long userId) {
-        return this.postService.createPost(createPostDto, userId);
+    public GeneralResponse createPost(@Valid @RequestBody CreatePostDto createPostDto, Principal principal) {
+        return this.postService.createPost(createPostDto, principal.getName());
     }
 
     @GetMapping("/recent")
-    public List<PostInfoDto> getRecentPosts() {
-        return this.postService.getRecentPosts();
+    public List<PostInfoDto> getRecentPosts(Principal principal) {
+        return this.postService.getRecentPosts(principal.getName());
     }
 
-    @GetMapping("/latest")
-    public List<PostInfoDto> getPopularPosts() {
-        return this.postService.getPopularPosts();
+    @GetMapping("/popular")
+    public List<PostInfoDto> getPopularPosts(Principal principal) {
+        return this.postService.getPopularPosts(principal.getName());
     }
 
     @GetMapping("/{postId}")
-    public List<CommentInfoDto> getComments(@PathVariable Long postId) {
-        return this.postService.getComments(postId);
+    public PostInfoDto getPostInfo(@PathVariable Long postId, Principal principal) {
+        return this.postService.getPostInfo(postId, principal.getName());
+    }
+
+    @DeleteMapping("/{postId}")
+    public GeneralResponse deletePost(@PathVariable Long postId, Principal principal) {
+        return this.postService.deletePost(postId, principal.getName());
     }
 
     @PostMapping("{postId}/like")
-    public GeneralResponse likePost(@PathVariable Long postId, @RequestHeader("X-USER-ID") Long userID) {
-        return this.postService.likePost(postId, userID);
+    public GeneralResponse likePost(@PathVariable Long postId, Principal principal) {
+        return this.postService.likePost(postId, principal.getName());
+    }
+
+    @GetMapping("/categories")
+    public List<PostCategoryDto> getCategories() {
+        return this.postService.getAllCategories();
+    }
+
+    @GetMapping("/find/{categoryName}")
+    public List<PostInfoDto> findByCategory(@PathVariable String categoryName, Principal principal) {
+        return this.postService.findByCategory(categoryName, principal.getName());
     }
 }
