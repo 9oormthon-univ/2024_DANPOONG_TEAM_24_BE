@@ -8,7 +8,5 @@ public class RecipeListDto {
         this.recipeId = recipeId;
         this.recipeName = recipeName;
     }
-
-    public RecipeListDto() {}
 }
 
