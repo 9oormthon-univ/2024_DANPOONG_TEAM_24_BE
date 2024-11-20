@@ -21,4 +21,9 @@ public class CommentController {
     public GeneralResponse createComment(@Valid @RequestBody CreateCommentDto createCommentDto, Principal principal) {
         return this.commentService.createComment(createCommentDto, principal.getName());
     }
+
+    @DeleteMapping("/{commentId}")
+    public GeneralResponse deleteComment(@PathVariable Long commentId, Principal principal) {
+        return this.commentService.deleteComment(commentId, principal.getName());
+    }
 }
