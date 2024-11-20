@@ -7,8 +7,24 @@ spring:
     include:
       - mysql
 
+server:
+  port: 3000
+
 springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html
+    
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+server:
+  ssl:
+    key-store: ${KEY_STORE_PATH}
+    key-store-password: ${KEY_STORE_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: ${KEY_ALIAS}
