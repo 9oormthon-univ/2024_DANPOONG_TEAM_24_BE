@@ -1,4 +1,4 @@
-package com.ieum.be.dto;
+package com.ieum.be.domain.recipe.dto;
 
 public class AiGeneratedRecipeDto {
     private String recipeResult;

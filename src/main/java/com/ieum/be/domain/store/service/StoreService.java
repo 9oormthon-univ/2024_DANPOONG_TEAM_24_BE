@@ -1,10 +1,10 @@
-package com.ieum.be.service;
+package com.ieum.be.domain.store.service;
 
-import com.ieum.be.dto.CategoryDto;
-import com.ieum.be.dto.StoreDto;
-import com.ieum.be.dto.StoreInfoDto;
-import com.ieum.be.repository.CategoryRepository;
-import com.ieum.be.repository.StoreRepository;
+import com.ieum.be.domain.category.dto.CategoryDto;
+import com.ieum.be.domain.store.dto.StoreDto;
+import com.ieum.be.domain.store.dto.StoreInfoDto;
+import com.ieum.be.domain.category.repository.CategoryRepository;
+import com.ieum.be.domain.store.repository.StoreRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

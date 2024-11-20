@@ -1,6 +1,6 @@
-package com.ieum.be.repository;
+package com.ieum.be.domain.store.repository;
 
-import com.ieum.be.domain.Store;
+import com.ieum.be.domain.store.entity.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

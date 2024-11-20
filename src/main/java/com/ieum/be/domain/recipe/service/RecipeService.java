@@ -1,6 +1,5 @@
-package com.ieum.be.service;
+package com.ieum.be.domain.recipe.service;
 
-import com.ieum.be.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
 @Service

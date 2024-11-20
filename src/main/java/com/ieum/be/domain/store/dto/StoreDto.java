@@ -1,4 +1,4 @@
-package com.ieum.be.dto;
+package com.ieum.be.domain.store.dto;
 
 public class StoreDto {
     private Integer storeId;

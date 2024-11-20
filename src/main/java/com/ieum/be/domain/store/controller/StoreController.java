@@ -1,10 +1,9 @@
-package com.ieum.be.controller;
+package com.ieum.be.domain.store.controller;
 
-import com.ieum.be.dto.CategoryDto;
-import com.ieum.be.dto.StoreDto;
-import com.ieum.be.dto.StoreInfoDto;
-import com.ieum.be.service.StoreService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ieum.be.domain.store.service.StoreService;
+import com.ieum.be.domain.category.dto.CategoryDto;
+import com.ieum.be.domain.store.dto.StoreDto;
+import com.ieum.be.domain.store.dto.StoreInfoDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

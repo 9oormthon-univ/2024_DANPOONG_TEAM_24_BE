@@ -1,4 +1,4 @@
-package com.ieum.be.domain;
+package com.ieum.be.domain.recipe.entity;
 
 import jakarta.persistence.*;
 

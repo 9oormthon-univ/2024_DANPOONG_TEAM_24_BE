@@ -1,7 +1,5 @@
-package com.ieum.be.controller;
+package com.ieum.be.domain.recipe.controller;
 
-import com.ieum.be.service.RecipeService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

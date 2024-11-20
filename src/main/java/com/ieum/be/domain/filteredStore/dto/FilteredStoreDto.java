@@ -1,4 +1,4 @@
-package com.ieum.be.dto;
+package com.ieum.be.domain.filteredStore.dto;
 
 public class FilteredStoreDto {
     private Integer fstoreId;

@@ -1,4 +1,4 @@
-package com.ieum.be.dto;
+package com.ieum.be.domain.category.dto;
 
 public class CategoryDto {
     private Integer categoryId;

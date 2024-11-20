@@ -1,5 +1,7 @@
-package com.ieum.be.domain;
+package com.ieum.be.domain.store.entity;
 
+import com.ieum.be.domain.category.entity.Category;
+import com.ieum.be.domain.filteredStore.entity.FilteredStore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
