@@ -39,8 +39,7 @@ public class GlobalExceptionHandler {
             return GeneralResponse.REJECTED;
         }
 
-        throw new RuntimeException(exception);
-        //return GeneralResponse.INTERNAL_SERVER_ERROR;
+        return GeneralResponse.INTERNAL_SERVER_ERROR;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

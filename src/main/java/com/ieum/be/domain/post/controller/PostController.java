@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,8 +23,8 @@ public class PostController {
     }
 
     @PostMapping
-    public GeneralResponse createPost(@Valid @RequestBody CreatePostDto createPostDto, @RequestHeader("X-USER-ID") Long userId) {
-        return this.postService.createPost(createPostDto, userId);
+    public GeneralResponse createPost(@Valid @RequestBody CreatePostDto createPostDto, Principal principal) {
+        return this.postService.createPost(createPostDto, principal.getName());
     }
 
     @GetMapping("/recent")
@@ -42,7 +43,7 @@ public class PostController {
     }
 
     @PostMapping("{postId}/like")
-    public GeneralResponse likePost(@PathVariable Long postId, @RequestHeader("X-USER-ID") Long userID) {
-        return this.postService.likePost(postId, userID);
+    public GeneralResponse likePost(@PathVariable Long postId, Principal principal) {
+        return this.postService.likePost(postId, principal.getName());
     }
 }

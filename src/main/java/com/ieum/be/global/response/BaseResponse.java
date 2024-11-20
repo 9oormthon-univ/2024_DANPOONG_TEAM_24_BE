@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 @Builder
 @Getter
@@ -33,6 +35,10 @@ public class BaseResponse<T> {
 
     public static BaseResponse<?> of(GeneralResponse generalResponse) {
         return new BaseResponse<>(generalResponse.getCode(), generalResponse.getMessage(), null);
+    }
+
+    public ResponseEntity<?> to() {
+        return ResponseEntity.status(this.code).header("Content-Type", MediaType.APPLICATION_JSON_VALUE).body(this);
     }
 
     @Override
