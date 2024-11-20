@@ -5,16 +5,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RecipeListDto {
+public class RecipeDto {
     private Integer recipeId;
     private String recipeName;
+    private String description;
 
-    public RecipeListDto() {
+    public RecipeDto() {
     }
 
-    public RecipeListDto(Integer recipeId, String recipeName) {
+    public RecipeDto(Integer recipeId, String recipeName, String description) {
         this.recipeId = recipeId;
         this.recipeName = recipeName;
+        this.description = description;
     }
 }
-

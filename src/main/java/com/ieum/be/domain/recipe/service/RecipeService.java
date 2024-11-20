@@ -1,16 +1,14 @@
 package com.ieum.be.domain.recipe.service;
 
-import com.ieum.be.domain.recipe.dto.AiRecipeResponse;
-import com.ieum.be.domain.recipe.dto.OptionDto;
-import com.ieum.be.domain.recipe.dto.RecipeListDto;
-import com.ieum.be.domain.recipe.dto.AiRecipeRequest;
+import com.ieum.be.domain.recipe.dto.*;
 import com.ieum.be.domain.recipe.entity.Recipe;
 import com.ieum.be.domain.recipe.repository.RecipeRepository;
+import com.ieum.be.global.response.GeneralResponse;
+import com.ieum.be.global.response.GlobalException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,14 +20,20 @@ public class RecipeService {
     }
 
     // 추천 레시피 조회
-    public Recipe getRecipeById(Integer recipeId) {
-        return recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new RuntimeException("Recipe not found with id: " + recipeId));
+    public RecipeDto getRecipeById(Integer recipeId) {
+        Recipe recipe = recipeRepository.findRecipeByRecipeId(recipeId)
+                .orElseThrow(() -> new GlobalException(GeneralResponse.NOT_FOUND));
+
+        return new RecipeDto(
+                recipe.getRecipeId(),
+                recipe.getRecipeName(),
+                recipe.getDescription()
+        );
     }
 
     // 추천 레시피 리스트 조회
     public List<RecipeListDto> getAllRecommendedRecipes() {
-        List<Recipe> recipes = recipeRepository.findTop10ByOrderByRecipeIdDesc();  // Example for top recipes
+        List<Recipe> recipes = recipeRepository.findTop10ByOrderByRecipeIdDesc();
         return recipes.stream()
                 .map(recipe -> new RecipeListDto(recipe.getRecipeId(), recipe.getRecipeName()))
                 .toList();

@@ -28,7 +28,7 @@ public class Recipe {
     private String keywords;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "convenience_store", nullable = false)
+    @Column(name = "convenience_store")
     private ConvenienceStoreType convenienceStore;
 
     public Recipe(Integer recipeId, String recipeName, String description, String priceRange, String keywords, ConvenienceStoreType convenienceStore) {

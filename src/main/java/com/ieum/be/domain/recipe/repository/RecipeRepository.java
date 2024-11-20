@@ -9,9 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
-    List<Recipe> findAll();
+    // List<Recipe> findAllRecipe();
 
-    Optional<Recipe> findById(Integer recipeId);
+    Optional<Recipe> findRecipeByRecipeId(Integer recipeId);
 
     List<Recipe> findTop10ByOrderByRecipeIdDesc();  // 추천 레시피 리스트 호출 예시
 }

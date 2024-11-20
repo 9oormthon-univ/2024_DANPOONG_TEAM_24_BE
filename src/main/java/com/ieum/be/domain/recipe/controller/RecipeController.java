@@ -2,8 +2,8 @@ package com.ieum.be.domain.recipe.controller;
 
 import com.ieum.be.domain.recipe.dto.AiRecipeRequest;
 import com.ieum.be.domain.recipe.dto.AiRecipeResponse;
+import com.ieum.be.domain.recipe.dto.RecipeDto;
 import com.ieum.be.domain.recipe.dto.RecipeListDto;
-import com.ieum.be.domain.recipe.entity.Recipe;
 import com.ieum.be.domain.recipe.service.RecipeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,20 +14,20 @@ import java.util.List;
 @RequestMapping("/recipes")
 public class RecipeController {
 
-    private RecipeService recipeService;
+    private final RecipeService recipeService;
 
     public RecipeController(RecipeService recipeService) { this.recipeService = recipeService; }
 
     // 추천 레시피 조회
     @GetMapping("/recommendation/{recipe_id}")
-    public ResponseEntity<?> getRecipeById(@PathVariable Integer recipe_id) {
-        Recipe recipe = recipeService.getRecipeById(recipe_id);
+    public ResponseEntity<RecipeDto> getRecipeById(@PathVariable("recipe_id") Integer recipeId) {
+        RecipeDto recipe = recipeService.getRecipeById(recipeId);
         return ResponseEntity.ok(recipe);
     }
 
     // 추천 레시피 리스트 조회
     @GetMapping("/recommendation")
-    public ResponseEntity<?> getAllRecommendedRecipes() {
+    public ResponseEntity<List<RecipeListDto>> getAllRecommendedRecipes() {
         List<RecipeListDto> recipes = recipeService.getAllRecommendedRecipes();
         return ResponseEntity.ok(recipes);
     }
