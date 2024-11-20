@@ -2,12 +2,15 @@ package com.ieum.be.domain.post.service;
 
 import com.ieum.be.domain.comment.dto.CommentInfoDto;
 import com.ieum.be.domain.comment.entity.Comment;
-import com.ieum.be.domain.post.entity.Likes;
-import com.ieum.be.domain.post.repository.LikeRepository;
-import com.ieum.be.domain.post.repository.PostRepository;
 import com.ieum.be.domain.post.dto.CreatePostDto;
+import com.ieum.be.domain.post.dto.PostCategoryDto;
 import com.ieum.be.domain.post.dto.PostInfoDto;
+import com.ieum.be.domain.post.entity.Likes;
 import com.ieum.be.domain.post.entity.Post;
+import com.ieum.be.domain.post.entity.PostCategory;
+import com.ieum.be.domain.post.repository.LikeRepository;
+import com.ieum.be.domain.post.repository.PostCategoryRepository;
+import com.ieum.be.domain.post.repository.PostRepository;
 import com.ieum.be.domain.user.entity.User;
 import com.ieum.be.domain.user.repository.UserRepository;
 import com.ieum.be.global.response.GeneralResponse;
@@ -24,21 +27,27 @@ public class PostService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
+    private final PostCategoryRepository postCategoryRepository;
 
-    public PostService(UserRepository userRepository, PostRepository postRepository, LikeRepository likeRepository) {
+    public PostService(UserRepository userRepository, PostRepository postRepository, LikeRepository likeRepository, PostCategoryRepository postCategoryRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.likeRepository = likeRepository;
+        this.postCategoryRepository = postCategoryRepository;
     }
 
     public GeneralResponse createPost(CreatePostDto createPostDto, String email) {
         User user = this.userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new GlobalException(GeneralResponse.USER_NOT_FOUND));
 
+        PostCategory postCategory = this.postCategoryRepository.findPostCategoryByCategoryName(createPostDto.categoryName())
+                .orElseThrow(() -> new GlobalException(GeneralResponse.POST_CATEGORY_NOT_FOUND));
+
         Post post = Post.builder()
                 .user(user)
                 .title(createPostDto.title())
                 .content(createPostDto.content())
+                .postCategory(postCategory)
                 .build();
 
         this.postRepository.save(post);
@@ -46,23 +55,38 @@ public class PostService {
         return GeneralResponse.OK;
     }
 
-    public List<PostInfoDto> getRecentPosts() {
-        List<Post> posts = this.postRepository.getTop10ByOrderByCreatedAtDesc();
+    public List<PostInfoDto> getRecentPosts(String email) {
+        List<Post> posts = this.postRepository.getTop30ByOrderByCreatedAtDesc();
 
-        return posts.stream().map(PostInfoDto::of).collect(Collectors.toList());
+        return getLikedByMe(posts, posts.stream().map(PostInfoDto::of).toList(), email);
     }
 
-    public List<PostInfoDto> getPopularPosts() {
-        List<Post> posts = this.postRepository.getTop10ByOrderByLikesDesc();
+    public List<PostInfoDto> getPopularPosts(String email) {
+        List<Post> posts = this.postRepository.getTop30ByOrderByLikesDesc();
 
-        return posts.stream().map(PostInfoDto::of).collect(Collectors.toList());
+        return getLikedByMe(posts, posts.stream().map(PostInfoDto::of).collect(Collectors.toList()), email);
     }
 
-    public List<CommentInfoDto> getComments(Long postId) {
+    public PostInfoDto getPostInfo(Long postId, String email) {
         Post post = this.postRepository.findById(postId).orElseThrow(() -> new GlobalException(GeneralResponse.POST_NOT_FOUND));
-        List<Comment> comments = post.getComments();
+        PostInfoDto result = PostInfoDto.of(post);
 
-        return comments.stream().map(CommentInfoDto::of).collect(Collectors.toList());
+        result.setLikedByMe(post.getLikes().stream().anyMatch(like -> like.getUser().getEmail().equals(email)));
+
+        return result;
+    }
+
+    public GeneralResponse deletePost(Long postId, String email) {
+        Post post = this.postRepository.findPostById(postId)
+                .orElseThrow(() -> new GlobalException(GeneralResponse.POST_NOT_FOUND));
+
+        if (!post.getUser().getEmail().equals(email)) {
+            throw new GlobalException(GeneralResponse.FORBIDDEN);
+        }
+
+        this.postRepository.delete(post);
+
+        return GeneralResponse.OK;
     }
 
     public GeneralResponse likePost(Long postId, String email) {
@@ -85,5 +109,40 @@ public class PostService {
         this.likeRepository.save(likes);
 
         return GeneralResponse.OK;
+    }
+
+    public List<PostCategoryDto> getAllCategories() {
+        return this.postCategoryRepository.findAll().stream().map(PostCategoryDto::of).toList();
+    }
+
+    public List<PostInfoDto> findByCategory(String categoryName, String email) {
+        if (categoryName.equals("all")) {
+            return this.postRepository.getAllByPostCategoryNotNull().stream().map(PostInfoDto::of).toList();
+        }
+
+        if (categoryName.equals("popular")) {
+            return this.postRepository.getTop30ByOrderByLikesDesc().stream().map(PostInfoDto::of).toList();
+        }
+
+        PostCategory postCategory = this.postCategoryRepository.findPostCategoryByCategoryName(categoryName).orElse(null);
+
+        if (postCategory == null) {
+            throw new GlobalException(GeneralResponse.POST_CATEGORY_NOT_FOUND);
+        }
+
+        List<Post> posts = this.postRepository.getPostByPostCategoryOrderByCreatedAtDesc(postCategory);
+
+        return getLikedByMe(posts, posts.stream().map(PostInfoDto::of).toList(), email);
+    }
+
+    private List<PostInfoDto> getLikedByMe(List<Post> posts, List<PostInfoDto> target, String email) {
+        for (int i = 0; i < posts.size(); i++) {
+            Post post = posts.get(i);
+            PostInfoDto postInfoDto = target.get(i);
+
+            postInfoDto.setLikedByMe(this.likeRepository.findLikeByUserEmailAndPostId(email, post.getId()).isPresent());
+        }
+
+        return target;
     }
 }

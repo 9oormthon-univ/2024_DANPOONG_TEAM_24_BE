@@ -39,4 +39,8 @@ public class Post {
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<Likes> likes;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private PostCategory postCategory;
 }

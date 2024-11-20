@@ -42,4 +42,17 @@ public class CommentService {
 
         return GeneralResponse.OK;
     }
+
+    public GeneralResponse deleteComment(Long commentId, String email) {
+        Comment comment = this.commentRepository.findCommentByCommentId(commentId)
+                .orElseThrow(() -> new GlobalException(GeneralResponse.COMMENT_NOT_FOUND));
+
+        if (!comment.getUser().getEmail().equals(email)) {
+            throw new GlobalException(GeneralResponse.FORBIDDEN);
+        }
+
+        this.commentRepository.delete(comment);
+
+        return GeneralResponse.OK;
+    }
 }
