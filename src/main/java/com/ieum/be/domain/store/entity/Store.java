@@ -26,9 +26,6 @@ public class Store {
     @Column(name = "road_address", nullable = false)
     private String roadAddress;
 
-    @Column(name = "lot_address")
-    private String lotAddress;
-
     @Column(name = "phone")
     private String phone;
 
@@ -37,6 +34,9 @@ public class Store {
 
     @Column(name = "longitude")
     private Float longitude;
+
+    @Column(name = "score")
+    private Float score;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -48,14 +48,13 @@ public class Store {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FilteredStore> filteredStores = new ArrayList<>();
 
-    public Store(Integer storeId, String storeName, String roadAddress, String lotAddress, String phone, Float latitude, Float longitude, String imageUrl, Category category) {
-        this.storeId = storeId;
+    public Store(String storeName, String roadAddress, String phone, Float latitude, Float longitude, Float score, String imageUrl, Category category) {
         this.storeName = storeName;
         this.roadAddress = roadAddress;
-        this.lotAddress = lotAddress;
         this.phone = phone;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.score = score;
         this.imageUrl = imageUrl;
         this.category = category;
     }

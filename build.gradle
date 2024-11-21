@@ -52,6 +52,10 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	// Optional: Spring Boot Actuator for additional monitoring and health checks
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// Excel
+	implementation 'org.apache.poi:poi:5.2.3' // Core Apache POI
+	implementation 'org.apache.poi:poi-ooxml:5.2.3' // For Excel .xlsx support
 }
 
 tasks.named('test') {
