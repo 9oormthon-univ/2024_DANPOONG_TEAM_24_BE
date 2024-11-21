@@ -23,6 +23,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +43,7 @@ public class OAuthService {
     public ResponseEntity<?> authenticate(HttpServletRequest request) {
         String code = request.getParameter(RequestParameter.CODE.getValue());
         String redirectUri = request.getParameter(RequestParameter.REDIRECT_URI.getValue());
+        redirectUri = URLDecoder.decode(redirectUri, StandardCharsets.UTF_8);
 
         if (code == null) {
             throw new GlobalException(GeneralResponse.INTERNAL_SERVER_ERROR);
