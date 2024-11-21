@@ -46,7 +46,7 @@ public class OAuthService {
             throw new GlobalException(GeneralResponse.INTERNAL_SERVER_ERROR);
         }
 
-        return requestAccessToken(code);
+        return requestAccessToken(request, code);
     }
 
     public KakaoUserDataDto getDataUsingToken(String accessToken) {
@@ -76,7 +76,7 @@ public class OAuthService {
                 .build();
     }
 
-    private ResponseEntity<?> requestAccessToken(String code) {
+    private ResponseEntity<?> requestAccessToken(HttpServletRequest req, String code) {
         RestClient restClient = RestClient.builder().baseUrl(oAuthComponent.AUTH_URI).build();
 
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();

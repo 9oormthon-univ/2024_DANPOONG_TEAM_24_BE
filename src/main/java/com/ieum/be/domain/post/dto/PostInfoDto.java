@@ -1,13 +1,14 @@
 package com.ieum.be.domain.post.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ieum.be.domain.comment.dto.CommentInfoDto;
 import com.ieum.be.domain.post.entity.Post;
-import com.ieum.be.domain.post.entity.PostCategory;
+import com.ieum.be.global.dto.TimeDto;
 import lombok.Builder;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -22,7 +23,7 @@ public class PostInfoDto {
     private String authorProfileUrl;
 
     @JsonProperty("created_at")
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     @JsonProperty("title")
     private String title;
@@ -40,8 +41,13 @@ public class PostInfoDto {
     @JsonProperty("liked_by_me")
     private Boolean likedByMe;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("comments")
     private List<CommentInfoDto> comments;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("comment_count")
+    private Integer commentCount;
 
     @JsonProperty("post_category")
     private String categoryName;
@@ -51,12 +57,27 @@ public class PostInfoDto {
                 .postId(post.getId())
                 .author(post.getUser().getName())
                 .authorProfileUrl(post.getUser().getProfileUrl())
-                .createdAt(post.getCreatedAt())
+                .createdAt(new TimeDto(post.getCreatedAt()).toString())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .likes(post.getLikes().size())
                 .likeUser(post.getLikes().stream().map(like -> like.getUser().getName()).toList())
                 .comments(post.getComments().stream().map(CommentInfoDto::of).toList())
+                .categoryName(post.getPostCategory().getCategoryName())
+                .build();
+    }
+
+    public static PostInfoDto simpleOf(Post post) {
+        return PostInfoDto.builder()
+                .postId(post.getId())
+                .author(post.getUser().getName())
+                .authorProfileUrl(post.getUser().getProfileUrl())
+                .createdAt(new TimeDto(post.getCreatedAt()).toString())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .likes(post.getLikes().size())
+                .likeUser(post.getLikes().stream().map(like -> like.getUser().getName()).toList())
+                .commentCount(post.getComments().size())
                 .categoryName(post.getPostCategory().getCategoryName())
                 .build();
     }

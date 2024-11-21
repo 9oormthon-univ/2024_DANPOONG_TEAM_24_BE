@@ -13,6 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findPostById(Long postId);
     List<Post> getAllByPostCategoryNotNull();
     List<Post> getTop30ByOrderByCreatedAtDesc();
+    List<Post> getTop2ByOrderByLikesDesc();
     List<Post> getTop30ByOrderByLikesDesc();
     List<Post> getPostByPostCategoryOrderByCreatedAtDesc(PostCategory postCategory);
 }

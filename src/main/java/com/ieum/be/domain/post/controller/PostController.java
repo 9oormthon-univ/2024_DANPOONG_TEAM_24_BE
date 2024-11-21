@@ -1,14 +1,11 @@
 package com.ieum.be.domain.post.controller;
 
-import com.ieum.be.domain.comment.dto.CommentInfoDto;
 import com.ieum.be.domain.post.dto.CreatePostDto;
 import com.ieum.be.domain.post.dto.PostCategoryDto;
 import com.ieum.be.domain.post.dto.PostInfoDto;
-import com.ieum.be.domain.post.entity.Post;
 import com.ieum.be.domain.post.service.PostService;
 import com.ieum.be.global.response.GeneralResponse;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
