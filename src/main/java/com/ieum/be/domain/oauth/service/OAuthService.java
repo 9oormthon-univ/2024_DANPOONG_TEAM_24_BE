@@ -41,12 +41,13 @@ public class OAuthService {
 
     public ResponseEntity<?> authenticate(HttpServletRequest request) {
         String code = request.getParameter(RequestParameter.CODE.getValue());
+        String redirectUri = request.getParameter(RequestParameter.REDIRECT_URI.getValue());
 
         if (code == null) {
             throw new GlobalException(GeneralResponse.INTERNAL_SERVER_ERROR);
         }
 
-        return requestAccessToken(request, code);
+        return requestAccessToken(code, redirectUri);
     }
 
     public KakaoUserDataDto getDataUsingToken(String accessToken) {
@@ -76,7 +77,7 @@ public class OAuthService {
                 .build();
     }
 
-    private ResponseEntity<?> requestAccessToken(HttpServletRequest req, String code) {
+    private ResponseEntity<?> requestAccessToken(String code, String redirectUri) {
         RestClient restClient = RestClient.builder().baseUrl(oAuthComponent.AUTH_URI).build();
 
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
@@ -84,7 +85,7 @@ public class OAuthService {
         requestBody.add(RequestParameter.CODE.getValue(), code);
         requestBody.add(RequestParameter.GRANT_TYPE.getValue(), oAuthComponent.GRANT_TYPE);
         requestBody.add(RequestParameter.CLIENT_ID.getValue(), oAuthComponent.CLIENT_ID);
-        requestBody.add(RequestParameter.REDIRECT_URI.getValue(), oAuthComponent.REDIRECT_URI + "/auth");
+        requestBody.add(RequestParameter.REDIRECT_URI.getValue(), redirectUri);
 
         KakaoTokenResponse tokenResponse = restClient.post()
                 .uri(KakaoUrl.GET_TOKEN)
