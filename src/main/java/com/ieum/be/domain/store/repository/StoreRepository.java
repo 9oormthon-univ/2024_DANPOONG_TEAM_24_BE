@@ -21,8 +21,23 @@ public interface StoreRepository extends JpaRepository<Store, Integer> {
     @Query(value = """
         SELECT *, 
             ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) as distance
-        FROM store 
+        FROM store USE INDEX (idx_location)
         WHERE category_id = :categoryId 
+          AND MBRContains(
+                ST_GeomFromText(
+                    CONCAT(
+                        'POLYGON((',
+                        :latitude - (:distance / 111195), ' ', :longitude - (:distance / 111195), ',',
+                        :latitude + (:distance / 111195), ' ', :longitude - (:distance / 111195), ',',
+                        :latitude + (:distance / 111195), ' ', :longitude + (:distance / 111195), ',',
+                        :latitude - (:distance / 111195), ' ', :longitude + (:distance / 111195), ',',
+                        :latitude - (:distance / 111195), ' ', :longitude - (:distance / 111195),
+                        '))'
+                    ),
+                    4326
+                ),
+                location
+          )
           AND ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) <= :distance
         ORDER BY distance
     """, nativeQuery = true)
@@ -36,8 +51,23 @@ public interface StoreRepository extends JpaRepository<Store, Integer> {
     @Query(value = """
         SELECT *, 
             ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) as distance
-        FROM store 
+        FROM store USE INDEX (idx_location)
         WHERE score >= :score 
+          AND MBRContains(
+                ST_GeomFromText(
+                    CONCAT(
+                        'POLYGON((',
+                        :latitude - (:distance / 111195), ' ', :longitude - (:distance / 111195), ',',
+                        :latitude + (:distance / 111195), ' ', :longitude - (:distance / 111195), ',',
+                        :latitude + (:distance / 111195), ' ', :longitude + (:distance / 111195), ',',
+                        :latitude - (:distance / 111195), ' ', :longitude + (:distance / 111195), ',',
+                        :latitude - (:distance / 111195), ' ', :longitude - (:distance / 111195),
+                        '))'
+                    ),
+                    4326
+                ),
+                location
+          )
           AND ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) <= :distance
         ORDER BY distance
     """, nativeQuery = true)
@@ -51,8 +81,23 @@ public interface StoreRepository extends JpaRepository<Store, Integer> {
     @Query(value = """
         SELECT *, 
             ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) as distance
-        FROM store 
-        WHERE ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) <= :distance
+        FROM store USE INDEX (idx_location)
+        WHERE MBRContains(
+                ST_GeomFromText(
+                    CONCAT(
+                        'POLYGON((',
+                        :latitude - (:distance / 111195), ' ', :longitude - (:distance / 111195), ',',
+                        :latitude + (:distance / 111195), ' ', :longitude - (:distance / 111195), ',',
+                        :latitude + (:distance / 111195), ' ', :longitude + (:distance / 111195), ',',
+                        :latitude - (:distance / 111195), ' ', :longitude + (:distance / 111195), ',',
+                        :latitude - (:distance / 111195), ' ', :longitude - (:distance / 111195),
+                        '))'
+                    ),
+                    4326
+                ),
+                location
+          )
+          AND ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) <= :distance
         ORDER BY distance
     """, nativeQuery = true)
     List<Store> findStoresByDistance(
