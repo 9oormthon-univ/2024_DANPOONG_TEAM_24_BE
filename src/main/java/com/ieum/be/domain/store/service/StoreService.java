@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StoreService {
@@ -164,9 +165,27 @@ public class StoreService {
                 .toList();
     }
 
-    // 옵션을 사용하여 음식점 리스트 반환
+    // 옵션 사용하여 음식점 리스트 반환
     public List<StoreDto> getStoresByOptions(String options) {
-        throw new UnsupportedOperationException("This feature is not yet implemented");
+        List<Store> stores;
+
+        if (options != null && options.equalsIgnoreCase("score>=4")) {
+            // 옵션이 "score>=4"인 경우, score가 4 이상인 음식점 필터링
+            stores = this.storeRepository.findByScoreGreaterThanEqual(4);
+        } else {
+            // 옵션이 없을 경우, 모든 음식점 반환
+            stores = this.storeRepository.findAll();
+        }
+
+        return stores.stream()
+                .map(store -> new StoreDto(
+                        store.getStoreId(),
+                        store.getStoreName(),
+                        store.getRoadAddress(),
+                        store.getLatitude(),
+                        store.getLongitude()
+                ))
+                .collect(Collectors.toList());
     }
 
     // 음식점 상세 정보 반환

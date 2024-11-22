@@ -10,11 +10,15 @@ import java.util.Optional;
 
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Integer> {
+    // 모든 식당 리스트 찾기
+    List<Store> findAll();
+
     // categoryId로 식당 리스트 찾기
     List<Store> findByCategory_CategoryId(Integer categoryId);
 
-    // storeId로 찾기
+    // storeId로 식당 찾기
     Optional<Store> findByStoreId(Integer storeId);
 
-    // Find stores with filters
+    // score가 4 이상인 식당 리스트 찾기
+    List<Store> findByScoreGreaterThanEqual(float score);
 }
