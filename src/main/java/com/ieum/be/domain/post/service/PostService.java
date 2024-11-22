@@ -15,9 +15,11 @@ import com.ieum.be.domain.user.entity.User;
 import com.ieum.be.domain.user.repository.UserRepository;
 import com.ieum.be.global.response.GeneralResponse;
 import com.ieum.be.global.response.GlobalException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,13 +60,13 @@ public class PostService {
     public List<PostInfoDto> getRecentPosts(String email) {
         List<Post> posts = this.postRepository.getTop30ByOrderByCreatedAtDesc();
 
-        return getLikedByMe(posts, posts.stream().map(PostInfoDto::of).toList(), email);
+        return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
     }
 
     public List<PostInfoDto> getPopularPosts(String email) {
-        List<Post> posts = this.postRepository.getTop30ByOrderByLikesDesc();
+        List<Post> posts = this.postRepository.getTop2ByOrderByLikesDesc();
 
-        return getLikedByMe(posts, posts.stream().map(PostInfoDto::of).collect(Collectors.toList()), email);
+        return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).collect(Collectors.toList()), email);
     }
 
     public PostInfoDto getPostInfo(Long postId, String email) {
@@ -117,11 +119,15 @@ public class PostService {
 
     public List<PostInfoDto> findByCategory(String categoryName, String email) {
         if (categoryName.equals("all")) {
-            return this.postRepository.getAllByPostCategoryNotNull().stream().map(PostInfoDto::of).toList();
+            List<Post> posts = this.postRepository.getAllByPostCategoryNotNull();
+
+            return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
         }
 
         if (categoryName.equals("popular")) {
-            return this.postRepository.getTop30ByOrderByLikesDesc().stream().map(PostInfoDto::of).toList();
+            List<Post> posts = this.postRepository.getTop30ByOrderByLikesDesc();
+
+            return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
         }
 
         PostCategory postCategory = this.postCategoryRepository.findPostCategoryByCategoryName(categoryName).orElse(null);
@@ -132,7 +138,48 @@ public class PostService {
 
         List<Post> posts = this.postRepository.getPostByPostCategoryOrderByCreatedAtDesc(postCategory);
 
-        return getLikedByMe(posts, posts.stream().map(PostInfoDto::of).toList(), email);
+        return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
+    }
+
+    public List<PostInfoDto> getMyPost(String type, String email) {
+        List<Post> posts = null;
+        switch (type) {
+            case "my_post" -> posts = this.postRepository.getPostsByUserEmail(email);
+
+            case "commented" -> {
+                posts = this.postRepository.getAllByPostCategoryNotNull()
+                        .stream().map(post -> {
+                            List<Comment> comments = post.getComments();
+
+                            for (Comment comment : comments) {
+                                if (comment.getUser().getEmail().equals(email)) {
+                                    return post;
+                                }
+                            }
+
+                            return null;
+                        }).toList();
+
+                return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
+            }
+
+            case "liked" -> {
+                posts = this.postRepository.getAllByPostCategoryNotNull()
+                        .stream().map(post -> {
+                            List<Likes> likes = post.getLikes();
+
+                            for (Likes like : likes) {
+                                if (like.getUser().getEmail().equals(email)) {
+                                    return post;
+                                }
+                            }
+
+                            return null;
+                        }).toList();
+            }
+        }
+
+        return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
     }
 
     private List<PostInfoDto> getLikedByMe(List<Post> posts, List<PostInfoDto> target, String email) {
