@@ -3,4 +3,3 @@ oauth:
     api_key: ${KAKAO_CLIENT_ID}
     auth_url: ${KAKAO_AUTH_URL}
     api_url: ${KAKAO_API_URL}
-    redirect_url: ${KAKAO_REDIRECT_URL}

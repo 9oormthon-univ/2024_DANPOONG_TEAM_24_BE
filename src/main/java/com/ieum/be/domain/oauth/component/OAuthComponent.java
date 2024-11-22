@@ -16,8 +16,5 @@ public class OAuthComponent {
     @Value("${oauth.kakao.api_url}")
     public String API_URI;
 
-    @Value("${oauth.kakao.redirect_url}")
-    public String REDIRECT_URI;
-
     public final String GRANT_TYPE = "authorization_code";
 }
