@@ -1,5 +1,10 @@
 package com.ieum.be.domain.store.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class StoreDto {
     private Integer storeId;
     private String storeName;
@@ -14,7 +19,5 @@ public class StoreDto {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-
-    public StoreDto() {}
 }
 
