@@ -151,43 +151,6 @@ public class StoreService {
         return null;
     }
 
-    // 카테고리에 맞는 음식점 리스트 반환
-    public List<StoreDto> getStoresByCategoryId(Integer categoryId) {
-        List<Store> stores = this.storeRepository.findByCategory_CategoryId(categoryId);
-        return stores.stream()
-                .map(store -> new StoreDto(
-                        store.getStoreId(),
-                        store.getStoreName(),
-                        store.getRoadAddress(),
-                        store.getLatitude(),
-                        store.getLongitude()
-                ))
-                .toList();
-    }
-
-    // 옵션 사용하여 음식점 리스트 반환
-    public List<StoreDto> getStoresByOptions(String options) {
-        List<Store> stores;
-
-        if (options != null && options.equalsIgnoreCase("score>=4")) {
-            // 옵션이 "score>=4"인 경우, score가 4 이상인 음식점 필터링
-            stores = this.storeRepository.findByScoreGreaterThanEqual(4);
-        } else {
-            // 옵션이 없을 경우, 모든 음식점 반환
-            stores = this.storeRepository.findAll();
-        }
-
-        return stores.stream()
-                .map(store -> new StoreDto(
-                        store.getStoreId(),
-                        store.getStoreName(),
-                        store.getRoadAddress(),
-                        store.getLatitude(),
-                        store.getLongitude()
-                ))
-                .collect(Collectors.toList());
-    }
-
     // 음식점 상세 정보 반환
     public StoreInfoDto getStoreById(Integer storeId) {
         Store store = this.storeRepository.findByStoreId(storeId)
@@ -200,5 +163,42 @@ public class StoreService {
                 store.getPhone(),
                 store.getImageUrl(),
                 store.getScore());
+    }
+
+    // 반경 1km 내 카테고리별 식당 반환
+    public List<StoreDto> getStoresByCategoryAndLocation(Integer categoryId, Double latitude, Double longitude) {
+        List<Store> stores = storeRepository.findStoresByCategoryAndDistance(categoryId, latitude, longitude, 1000);
+        return stores.stream()
+                .map(store -> new StoreDto(
+                        store.getStoreId(),
+                        store.getStoreName(),
+                        store.getRoadAddress(),
+                        store.getLatitude(),
+                        store.getLongitude()
+                ))
+                .toList();
+    }
+
+    // 반경 1km 내 옵션별 식당 반환
+    public List<StoreDto> getStoresByOptionsAndLocation(String options, Double latitude, Double longitude) {
+        List<Store> stores;
+
+        if (options != null && options.equalsIgnoreCase("score>=4")) {
+            // 옵션이 "score>=4"인 경우
+            stores = storeRepository.findByScoreAndDistance(4, latitude, longitude, 1000);
+        } else {
+            // 옵션이 없을 경우, 모든 반경 1km 내의 식당 반환
+            stores = storeRepository.findStoresByDistance(latitude, longitude, 1000);
+        }
+
+        return stores.stream()
+                .map(store -> new StoreDto(
+                        store.getStoreId(),
+                        store.getStoreName(),
+                        store.getRoadAddress(),
+                        store.getLatitude(),
+                        store.getLongitude()
+                ))
+                .collect(Collectors.toList());
     }
 }

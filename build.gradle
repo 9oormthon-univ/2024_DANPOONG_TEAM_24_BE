@@ -56,6 +56,10 @@ dependencies {
 	// Excel
 	implementation 'org.apache.poi:poi:5.2.3' // Core Apache POI
 	implementation 'org.apache.poi:poi-ooxml:5.2.3' // For Excel .xlsx support
+
+	// hibernate 공간 데이터
+	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '6.5.3.Final'
+
 }
 
 tasks.named('test') {
