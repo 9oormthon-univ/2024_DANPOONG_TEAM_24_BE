@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +19,12 @@ public interface StoreRepository extends JpaRepository<Store, Integer> {
 
 
     @Query(value = """
-        SELECT * 
+        SELECT *, 
+            ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) as distance
         FROM store 
         WHERE category_id = :categoryId 
           AND ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) <= :distance
+        ORDER BY distance
     """, nativeQuery = true)
     List<Store> findStoresByCategoryAndDistance(
             @Param("categoryId") Integer categoryId,
@@ -33,10 +34,12 @@ public interface StoreRepository extends JpaRepository<Store, Integer> {
     );
 
     @Query(value = """
-        SELECT * 
+        SELECT *, 
+            ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) as distance
         FROM store 
         WHERE score >= :score 
           AND ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) <= :distance
+        ORDER BY distance
     """, nativeQuery = true)
     List<Store> findByScoreAndDistance(
             @Param("score") float score,
@@ -46,9 +49,11 @@ public interface StoreRepository extends JpaRepository<Store, Integer> {
     );
 
     @Query(value = """
-        SELECT * 
+        SELECT *, 
+            ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) as distance
         FROM store 
         WHERE ST_Distance_Sphere(location, ST_SRID(POINT(:longitude, :latitude), 4326)) <= :distance
+        ORDER BY distance
     """, nativeQuery = true)
     List<Store> findStoresByDistance(
             @Param("latitude") Double latitude,
