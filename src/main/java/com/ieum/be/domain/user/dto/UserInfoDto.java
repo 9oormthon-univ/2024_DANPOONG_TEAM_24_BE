@@ -8,23 +8,11 @@ import lombok.Data;
 public class UserInfoDto {
     private String email;
     private String name;
-    private String profileImage;
+    private String profileUrl;
 
-    public UserInfoDto(String email, String nickname, String profileImage) {
+    public UserInfoDto(String email, String name, String profileImage) {
         this.email = email;
         this.name = name;
-        this.profileImage = profileImage;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getProfileImage() {
-        return profileImage;
+        this.profileUrl = profileImage;
     }
 }
