@@ -35,7 +35,7 @@ public class RecipeService {
     public List<RecipeListDto> getAllRecommendedRecipes() {
         List<Recipe> recipes = recipeRepository.findTop10ByOrderByRecipeIdDesc();
         return recipes.stream()
-                .map(recipe -> new RecipeListDto(recipe.getRecipeId(), recipe.getRecipeName()))
+                .map(recipe -> new RecipeListDto(recipe.getRecipeId(), recipe.getRecipeName(), recipe.getDescription(), recipe.getImageUrl(), recipe.getVideoUrl()))
                 .toList();
     }
 }

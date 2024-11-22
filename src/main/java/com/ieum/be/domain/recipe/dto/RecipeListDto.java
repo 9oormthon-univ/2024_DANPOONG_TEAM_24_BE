@@ -8,13 +8,19 @@ import lombok.Setter;
 public class RecipeListDto {
     private Integer recipeId;
     private String recipeName;
+    private String description;
+    private String imageUrl;
+    private String videoUrl;
 
     public RecipeListDto() {
     }
 
-    public RecipeListDto(Integer recipeId, String recipeName) {
+    public RecipeListDto(Integer recipeId, String recipeName, String description, String imageUrl, String videoUrl) {
         this.recipeId = recipeId;
         this.recipeName = recipeName;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.videoUrl = videoUrl;
     }
 }
 
