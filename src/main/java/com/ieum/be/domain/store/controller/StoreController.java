@@ -17,17 +17,23 @@ public class StoreController {
         this.storeService = storeService;
     }
 
-    // 카테고리별 음식점 리스트 조회
+    // 카테고리별 음식점 리스트 조회 (반경 1km 내)
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<?> getStoresByCategoryId(@PathVariable Integer categoryId) {
-        List<StoreDto> stores = storeService.getStoresByCategoryId(categoryId);
+    public ResponseEntity<?> getStoresByCategoryAndLocation(
+            @PathVariable Integer categoryId,
+            @RequestParam Double latitude,
+            @RequestParam Double longitude) {
+        List<StoreDto> stores = storeService.getStoresByCategoryAndLocation(categoryId, latitude, longitude);
         return ResponseEntity.ok(stores);
     }
 
-    // 옵션별 음식점 리스트 조회
+    // 옵션별 음식점 리스트 조회 (반경 1km 내)
     @GetMapping
-    public ResponseEntity<?> getStoresByOptions(@RequestParam(required = false) String options) {
-        List<StoreDto> stores = storeService.getStoresByOptions(options);
+    public ResponseEntity<?> getStoresByOptionsAndLocation(
+            @RequestParam(required = false) String options,
+            @RequestParam Double latitude,
+            @RequestParam Double longitude) {
+        List<StoreDto> stores = storeService.getStoresByOptionsAndLocation(options, latitude, longitude);
         return ResponseEntity.ok(stores);
     }
 
