@@ -143,21 +143,22 @@ public class PostService {
 
     public List<PostInfoDto> getMyPost(String type, String email) {
         List<Post> posts = null;
+
         switch (type) {
             case "my_post" -> posts = this.postRepository.getPostsByUserEmail(email);
 
             case "commented" -> {
                 posts = this.postRepository.getAllByPostCategoryNotNull()
-                        .stream().map(post -> {
+                        .stream().filter(post -> {
                             List<Comment> comments = post.getComments();
 
                             for (Comment comment : comments) {
                                 if (comment.getUser().getEmail().equals(email)) {
-                                    return post;
+                                    return true;
                                 }
                             }
 
-                            return null;
+                            return false;
                         }).toList();
 
                 return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
@@ -165,18 +166,22 @@ public class PostService {
 
             case "liked" -> {
                 posts = this.postRepository.getAllByPostCategoryNotNull()
-                        .stream().map(post -> {
+                        .stream().filter(post -> {
                             List<Likes> likes = post.getLikes();
 
                             for (Likes like : likes) {
                                 if (like.getUser().getEmail().equals(email)) {
-                                    return post;
+                                    return true;
                                 }
                             }
 
-                            return null;
+                            return false;
                         }).toList();
+
+                System.out.println(posts);
             }
+
+            default -> throw new GlobalException(GeneralResponse.FORBIDDEN);
         }
 
         return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
