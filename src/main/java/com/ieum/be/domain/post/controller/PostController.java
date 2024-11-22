@@ -59,4 +59,9 @@ public class PostController {
     public List<PostInfoDto> findByCategory(@PathVariable String categoryName, Principal principal) {
         return this.postService.findByCategory(categoryName, principal.getName());
     }
+
+    @GetMapping("/get/{type}")
+    public List<PostInfoDto> myPost(@PathVariable String type, Principal principal) {
+        return this.postService.getMyPost(type, principal.getName());
+    }
 }

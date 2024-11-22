@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -136,6 +137,47 @@ public class PostService {
         }
 
         List<Post> posts = this.postRepository.getPostByPostCategoryOrderByCreatedAtDesc(postCategory);
+
+        return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
+    }
+
+    public List<PostInfoDto> getMyPost(String type, String email) {
+        List<Post> posts = null;
+        switch (type) {
+            case "my_post" -> posts = this.postRepository.getPostsByUserEmail(email);
+
+            case "commented" -> {
+                posts = this.postRepository.getAllByPostCategoryNotNull()
+                        .stream().map(post -> {
+                            List<Comment> comments = post.getComments();
+
+                            for (Comment comment : comments) {
+                                if (comment.getUser().getEmail().equals(email)) {
+                                    return post;
+                                }
+                            }
+
+                            return null;
+                        }).toList();
+
+                return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
+            }
+
+            case "liked" -> {
+                posts = this.postRepository.getAllByPostCategoryNotNull()
+                        .stream().map(post -> {
+                            List<Likes> likes = post.getLikes();
+
+                            for (Likes like : likes) {
+                                if (like.getUser().getEmail().equals(email)) {
+                                    return post;
+                                }
+                            }
+
+                            return null;
+                        }).toList();
+            }
+        }
 
         return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
     }
