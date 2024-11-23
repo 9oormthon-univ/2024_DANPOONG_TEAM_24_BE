@@ -167,7 +167,7 @@ public class StoreService {
 
     // 반경 1km 내 카테고리별 식당 반환
     public List<StoreDto> getStoresByCategoryAndLocation(Integer categoryId, Double latitude, Double longitude) {
-        List<Store> stores = storeRepository.findStoresByCategoryAndDistance(categoryId, latitude, longitude, 1000);
+        List<Store> stores = storeRepository.findStoresByCategoryAndDistance(categoryId, latitude, longitude, 2000);
         return stores.stream()
                 .map(store -> new StoreDto(
                         store.getStoreId(),
@@ -188,7 +188,7 @@ public class StoreService {
 
         if (options != null && options.equalsIgnoreCase("score>=4")) {
             // 옵션이 "score>=4"인 경우
-            stores = storeRepository.findByScoreAndDistance(4, latitude, longitude, 1000);
+            stores = storeRepository.findByScoreAndDistance(4, latitude, longitude, 2000);
         } else {
             // 옵션이 없을 경우, 모든 반경 1km 내의 식당 반환
             stores = storeRepository.findStoresByDistance(latitude, longitude, 2000);
