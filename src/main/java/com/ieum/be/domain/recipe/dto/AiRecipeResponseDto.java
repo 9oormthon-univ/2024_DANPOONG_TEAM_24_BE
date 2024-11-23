@@ -8,9 +8,11 @@ import java.util.List;
 @Getter
 @Setter
 public class AiRecipeResponseDto {
-    private List<String> recipeParagraphs; // 문단별 데이터를 저장
+    private List<String> recipeParagraphs; // 문단별 데이터
+    private String koreanKeyword; // 선택한 키워드의 한국어 버전
 
-    public AiRecipeResponseDto(List<String> recipeParagraphs) {
+    public AiRecipeResponseDto(List<String> recipeParagraphs, String koreanKeyword) {
         this.recipeParagraphs = recipeParagraphs;
+        this.koreanKeyword = koreanKeyword;
     }
 }
