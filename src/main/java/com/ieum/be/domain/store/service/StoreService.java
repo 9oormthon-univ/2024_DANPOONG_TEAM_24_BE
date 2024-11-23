@@ -174,7 +174,10 @@ public class StoreService {
                         store.getStoreName(),
                         store.getRoadAddress(),
                         store.getLatitude(),
-                        store.getLongitude()
+                        store.getLongitude(),
+                        store.getPhone(),
+                        store.getImageUrl(),
+                        store.getKakaoMapUrl()
                 ))
                 .toList();
     }
@@ -197,7 +200,10 @@ public class StoreService {
                         store.getStoreName(),
                         store.getRoadAddress(),
                         store.getLatitude(),
-                        store.getLongitude()
+                        store.getLongitude(),
+                        store.getPhone(),
+                        store.getImageUrl(),
+                        store.getKakaoMapUrl()
                 ))
                 .collect(Collectors.toList());
     }

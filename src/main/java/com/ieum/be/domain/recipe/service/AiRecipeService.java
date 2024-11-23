@@ -88,9 +88,42 @@ public class AiRecipeService {
             throw new RuntimeException("Failed to call OpenAI API", e);
         }
     }
-
+/*
     // 프롬프트 생성
     private String buildPrompt(AiRecipeRequestDto request, String userText) {
+
+        String displayKeyword = request.getValue().get(2).getDisplay();
+        String prompt = String.format(
+                "편의점 %s에서 %s원으로 %s를 만족하는 식사를 구성해주세요.%n%n" +
+                        "다음 내용을 반드시 포함하여 한국어로 작성하세요:%n" +
+                        "1. 각 제품의 이름, 가격, 특징을 목록으로 제시%n" +
+                        "2. 총합 계산%n" +
+                        "3. 추천 식사 구성을 작성%n" +
+                        "4. 추가 참고 사항(%s)을 반드시 반영해 메뉴를 구성%n%n" +
+                        "예시:%n" +
+                        "CU에서 8000원으로 균형 잡힌 식단을 만족하는 식사를 구성하기 위해 다음과 같은 제품들을 추천해요.%n" +
+                        "1. 추천 제품 목록:%n" +
+                        "- 리얼프라이스 슬라이스 닭가슴살 갈릭맛 (2,300원): 부드럽고 촉촉한 닭가슴살%n" +
+                        "- 샐러드를 만드는 사람들 치킨 앤 에그 콥 샐러드 (4,100원): 신선한 채소와 단백질%n" +
+                        "- 리얼프라이스 플레인 요거트 (1,500원): 무가당 플레인 요거트%n" +
+                        "2. 총합: 7,900원%n" +
+                        "3. 추천 구성: 닭가슴살과 샐러드를 조합해 메인 식사를, 요거트를 디저트로 구성%n%n",
+                request.getValue().get(1).getValue(), // 편의점
+                request.getValue().get(0).getValue(), // 최대 금액
+                displayKeyword,                            // 한글 키워드
+                userText != null && !userText.trim().isEmpty() ? userText.trim() : "없음" // 추가 참고 사항
+        );
+        System.out.println("Generated Prompt: " + prompt);
+
+        return prompt;
+    }*/
+
+    private String buildPrompt(AiRecipeRequestDto request, String userText) {
+        List<OptionDto> options = request.getValue();
+        String store = options.size() > 1 ? (String) options.get(1).getValue() : "Unknown Store";
+        String maxAmount = options.size() > 0 ? String.valueOf(options.get(0).getValue()) : "0";
+        String displayKeyword = options.size() > 2 ? options.get(2).getDisplay() : "키워드 없음";
+        String additionalNotes = (userText != null && !userText.trim().isEmpty()) ? userText.trim() : "없음";
 
         String prompt = String.format(
                 "편의점 %s에서 %s원으로 %s를 만족하는 식사를 구성해주세요.%n%n" +
@@ -107,15 +140,10 @@ public class AiRecipeService {
                         "- 리얼프라이스 플레인 요거트 (1,500원): 무가당 플레인 요거트%n" +
                         "2. 총합: 7,900원%n" +
                         "3. 추천 구성: 닭가슴살과 샐러드를 조합해 메인 식사를, 요거트를 디저트로 구성%n%n",
-                request.getValue().get(1).getValue(), // 편의점
-                request.getValue().get(0).getValue(), // 최대 금액
-                request.getValue().get(2).getValue(),                              // 한글 키워드
-                userText != null && !userText.trim().isEmpty() ? userText.trim() : "없음", // 추가 참고 사항
-                request.getValue().get(1).getValue(),
-                request.getValue().get(0).getValue(),
-                request.getValue().get(2).getDisplay()
+                store, maxAmount, displayKeyword, additionalNotes, store, maxAmount, displayKeyword
         );
 
+        System.out.println("Generated Prompt: " + prompt);
         return prompt;
     }
 }
