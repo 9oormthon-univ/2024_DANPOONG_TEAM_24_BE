@@ -35,6 +35,15 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @Nonnull HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        // 인증 없이 접근 가능한 경로인지 확인
+        String requestURI = request.getRequestURI();
+
+        if (requestURI.startsWith("/recipes/generate") || requestURI.startsWith("/recipes/options")) {
+            // 인증 없이 처리할 경로는 바로 필터 체인으로 넘김
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String accessToken = resolveToken(request, response);
 
         if (accessToken == null) {

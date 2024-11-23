@@ -36,6 +36,7 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> {
                     request
+                            .requestMatchers("/recipes/options", "/recipes/generate").permitAll()
                             .requestMatchers("/oauth").permitAll()
                             .anyRequest().authenticated();
                 })

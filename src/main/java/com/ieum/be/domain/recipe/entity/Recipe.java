@@ -21,6 +21,12 @@ public class Recipe {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "video_url")
+    private String videoUrl;
+
     @Column(name = "price_range")
     private String priceRange;
 
@@ -31,10 +37,12 @@ public class Recipe {
     @Column(name = "convenience_store")
     private ConvenienceStoreType convenienceStore;
 
-    public Recipe(Integer recipeId, String recipeName, String description, String priceRange, String keywords, ConvenienceStoreType convenienceStore) {
+    public Recipe(Integer recipeId, String recipeName, String description, String imageUrl, String videoUrl, String priceRange, String keywords, ConvenienceStoreType convenienceStore) {
         this.recipeId = recipeId;
         this.recipeName = recipeName;
         this.description = description;
+        this.imageUrl = imageUrl;
+        this.videoUrl = videoUrl;
         this.priceRange = priceRange;
         this.keywords = keywords;
         this.convenienceStore = convenienceStore;

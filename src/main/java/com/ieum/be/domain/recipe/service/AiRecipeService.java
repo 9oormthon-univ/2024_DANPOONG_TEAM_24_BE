@@ -10,7 +10,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AiRecipeService {
@@ -56,30 +55,28 @@ public class AiRecipeService {
 
     // API 호출
     private String callChatGptApi(String prompt) {
-        // ChatGPT API에 대한 Request Body 구성
-        var requestBody = Map.of(
-                "model", "gpt-3.5-turbo",  // or another model
-                "messages", List.of(
-                        Map.of("role", "system", "content", "You are a helpful assistant."),
-                        Map.of("role", "user", "content", prompt)
-                ),
-                "temperature", 0.7
-        );
 
-        // API Request 전송
+        // 요청 준비
+        String requestBody = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"}, {\"role\": \"user\", \"content\": \"" + prompt + "\"}]}";
+
+        // OpenAI API 호출
         Mono<String> response = webClient.post()
                 .header("Authorization", "Bearer " + apiKey)
                 .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
                 .bodyValue(requestBody)
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(String.class);  // 응답을 JsonNode로 직접 처리
 
-        // 생성된 답변 가져오기
+        // 응답 받기
         try {
             String apiResponse = response.block();
             var jsonNode = new ObjectMapper().readTree(apiResponse);
             return jsonNode.path("choices").get(0).path("message").path("content").asText();
         } catch (Exception e) {
+            // 예외 로그
+            System.err.println("Error while calling OpenAI API: " + e.getMessage()); // 예외 메시지 출력
+            e.printStackTrace();  // 예외 스택 트레이스 출력
             throw new RuntimeException("Failed to call OpenAI API", e);
         }
     }
@@ -101,48 +98,3 @@ public class AiRecipeService {
         return prompt.toString();
     }
 }
-
-
-    /*// AI 레시피 생성
-    public AiRecipeResponse generateAiRecipe(AiRecipeRequest request, String userText) {
-        String convenienceStore = null;
-        Integer priceRange = null;
-        String keyword = null;
-
-        // request로부터 option 추출
-        for (OptionDto option : request.getValue()) {
-            if ("편의점 선택".equals(option.getDisplay())) {
-                convenienceStore = option.getValue().toString();
-            } else if ("최대 금액 선택".equals(option.getDisplay())) {
-                priceRange = Integer.parseInt(option.getValue().toString());
-            } else if ("키워드".equals(option.getDisplay())) {
-                keyword = option.getValue().toString();
-            }
-        }
-
-        // ChatGPT API prompt 생성
-        StringBuilder promptBuilder = new StringBuilder();
-        promptBuilder.append(String.format(
-                "편의점 %s에서 %s원으로 %s 관련 식사를 구성해 주세요.",
-                convenienceStore != null ? convenienceStore : "편의점",
-                priceRange != null ? priceRange : "예산",
-                keyword != null ? keyword : "키워드"
-        ));
-
-        // request에 text 포함되어 있다면 text도 프롬프트에 추가
-        if (userText != null && !userText.isEmpty()) {
-            promptBuilder.append(String.format(" 추가적으로 다음 내용을 참고해 주세요: \"%s\".", userText));
-        }
-
-        String prompt = promptBuilder.toString();
-
-        String generatedRecipe = callChatGptApi(prompt);
-
-        return new AiRecipeResponse(generatedRecipe);
-    }
-
-    private String callChatGptApi(String prompt) {
-        // Implement API call logic here
-        return "Generated Recipe: " + prompt;
-    }
-}*/
