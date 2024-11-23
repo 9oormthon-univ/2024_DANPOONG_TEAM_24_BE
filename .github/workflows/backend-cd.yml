@@ -22,7 +22,7 @@ jobs:
     - name: Run Docker Container
       env:
         DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
-      run: sudo docker run -p 8080:3000 -v /etc/letsencrypt/live/ideabank.me:/ssl --name ieum-be-container --env-file /etc/ieum/.env ${DOCKER_USERNAME}/ieum-be
+      run: sudo docker run -d -p 3000:3000 -v /etc/letsencrypt/live/ideabank.me:/ssl --name ieum-be-container --env-file /etc/ieum/.env ${DOCKER_USERNAME}/ieum-be
 
     - name: Remove old images
       run: sudo docker image prune -f
