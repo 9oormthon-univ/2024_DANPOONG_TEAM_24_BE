@@ -1,0 +1,28 @@
+name: Backend Image CD
+
+on:
+  workflow_run:
+    workflows: ["Backend Image CI"]
+    types:
+        - completed
+  
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+    - name: Pull Docker image
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
+      run: sudo docker pull ${DOCKER_USERNAME}/ieum-be:latest
+      
+    - name: Delete Old docker container
+      run: sudo docker rm -f ieum-be-container || true
+      
+    - name: Run Docker Container
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
+      run: sudo docker run -p 8080:3000 -v /etc/letsencrypt/live/ideabank.me:/ssl --name ieum-be-container --env-file /etc/ieum/.env ${DOCKER_USERNAME}/ieum-be
+
+    - name: Remove old images
+      run: sudo docker image prune -f
