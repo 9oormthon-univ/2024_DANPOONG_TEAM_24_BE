@@ -3,12 +3,14 @@ package com.ieum.be.domain.recipe.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class AiRecipeResponseDto {
-    private String recipeResult;
+    private List<String> recipeParagraphs; // 문단별 데이터를 저장
 
-    public AiRecipeResponseDto(String recipeResult) {
-        this.recipeResult = recipeResult;
+    public AiRecipeResponseDto(List<String> recipeParagraphs) {
+        this.recipeParagraphs = recipeParagraphs;
     }
 }
