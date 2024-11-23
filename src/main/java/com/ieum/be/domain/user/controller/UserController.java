@@ -2,6 +2,7 @@ package com.ieum.be.domain.user.controller;
 
 import com.ieum.be.domain.user.dto.CreateUserDto;
 import com.ieum.be.domain.user.dto.LoginDto;
+import com.ieum.be.domain.user.dto.UserInfoDto;
 import com.ieum.be.domain.user.dto.UserLocationDto;
 import com.ieum.be.domain.user.service.UserService;
 import com.ieum.be.global.response.GeneralResponse;
@@ -27,5 +28,10 @@ public class UserController {
     @PatchMapping("/location")
     public GeneralResponse updateUserLocation(@Valid @RequestBody UserLocationDto updateLocationDto, Principal principal) {
         return this.userService.updateUserLocation(updateLocationDto, principal.getName());
+    }
+
+    @GetMapping("/info")
+    public UserInfoDto getUserInfo(Principal principal) {
+        return this.userService.getUserInfo(principal.getName());
     }
 }

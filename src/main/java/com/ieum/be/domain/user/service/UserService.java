@@ -1,5 +1,6 @@
 package com.ieum.be.domain.user.service;
 
+import com.ieum.be.domain.user.dto.UserInfoDto;
 import com.ieum.be.domain.user.dto.UserLocationDto;
 import com.ieum.be.domain.user.entity.User;
 import com.ieum.be.domain.user.repository.UserRepository;
@@ -34,5 +35,12 @@ public class UserService {
         this.userRepository.save(user);
 
         return GeneralResponse.OK;
+    }
+
+    public UserInfoDto getUserInfo(String email) {
+        User user = this.userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new GlobalException(GeneralResponse.USER_NOT_FOUND));
+
+        return new UserInfoDto(user.getEmail(), user.getName(), user.getProfileUrl());
     }
 }
