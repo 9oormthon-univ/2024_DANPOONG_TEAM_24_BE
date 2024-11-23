@@ -64,7 +64,7 @@ public class PostService {
     }
 
     public List<PostInfoDto> getPopularPosts(String email) {
-        List<Post> posts = this.postRepository.getTop2ByOrderByLikesDesc();
+        List<Post> posts = this.postRepository.getTop2ByOrderByLikesDescCreatedAtDesc();
 
         return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).collect(Collectors.toList()), email);
     }
@@ -119,13 +119,13 @@ public class PostService {
 
     public List<PostInfoDto> findByCategory(String categoryName, String email) {
         if (categoryName.equals("all")) {
-            List<Post> posts = this.postRepository.getAllByPostCategoryNotNull();
+            List<Post> posts = this.postRepository.getAllByPostCategoryNotNullOrderByCreatedAtDesc();
 
             return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
         }
 
         if (categoryName.equals("popular")) {
-            List<Post> posts = this.postRepository.getTop30ByOrderByLikesDesc();
+            List<Post> posts = this.postRepository.getTop30ByOrderByLikesDescCreatedAtDesc();
 
             return getLikedByMe(posts, posts.stream().map(PostInfoDto::simpleOf).toList(), email);
         }
@@ -145,10 +145,10 @@ public class PostService {
         List<Post> posts = null;
 
         switch (type) {
-            case "my_post" -> posts = this.postRepository.getPostsByUserEmail(email);
+            case "my_post" -> posts = this.postRepository.getPostsByUserEmailOrderByCreatedAtDesc(email);
 
             case "commented" -> {
-                posts = this.postRepository.getAllByPostCategoryNotNull()
+                posts = this.postRepository.getAllByPostCategoryNotNullOrderByCreatedAtDesc()
                         .stream().filter(post -> {
                             List<Comment> comments = post.getComments();
 
@@ -165,7 +165,7 @@ public class PostService {
             }
 
             case "liked" -> {
-                posts = this.postRepository.getAllByPostCategoryNotNull()
+                posts = this.postRepository.getAllByPostCategoryNotNullOrderByCreatedAtDesc()
                         .stream().filter(post -> {
                             List<Likes> likes = post.getLikes();
 
