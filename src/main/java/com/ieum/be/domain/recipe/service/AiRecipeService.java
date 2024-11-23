@@ -112,8 +112,9 @@ public class AiRecipeService {
                         "1. 각 제품의 이름, 가격, 특징을 목록으로 제시%n" +
                         "2. 총합 계산%n" +
                         "3. 추천 식사 구성을 작성%n" +
-                        "4. 요구 사항(%s)을 반드시 반영해 메뉴를 구성%n" +
-                        "내용 각각을 독립적인 문단으로 작성하세요.%n",
+                        "4. 요구 사항(%s)을 반드시 반영해 메뉴를 구성해야 합니다%n" +
+                        "사용자 요구 사항을 반영하여, 제품의 구성을 조정해야 합니다. (요청: %s)%n%n" +
+                        "내용 각각을 독립적인 문단으로 작성하세요.%n" +
                         "예시:%n" +
                         "%s에서 %s원으로 %s를 만족하는 맛있는 한 끼를 구성하기 위해 다음과 같은 제품들을 추천해요.%n%n" +
                         "1. 추천 제품 목록:%n" +
@@ -122,7 +123,7 @@ public class AiRecipeService {
                         "- 리얼프라이스 플레인 요거트 (1,500원): 무가당 플레인 요거트%n%n" +
                         "2. 총합: 7,900원%n%n" +
                         "3. 추천 구성: 닭가슴살과 샐러드를 조합해 메인 식사를, 요거트를 디저트로 구성%n%n",
-                store, maxAmount, displayKeyword, userText, store, maxAmount, displayKeyword
+                store, maxAmount, displayKeyword, userText, userText, store, maxAmount, displayKeyword
         );
 
         System.out.println("Generated Prompt: " + prompt);
