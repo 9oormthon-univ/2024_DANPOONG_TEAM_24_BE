@@ -1,0 +1,38 @@
+name: Backend Image CI
+
+on:
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches: 
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - name: Login Dockerhub
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKERHUB_PASSWORD}}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD     
+      
+    - name: Switch to be branch
+      run: |
+        git fetch --all
+        git pull origin main
+    - name: Build the Docker image
+      run: docker build -t ieum-be .
+      
+    - name: taging
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
+      run: docker tag ieum-be:latest ${DOCKER_USERNAME}/ieum-be:latest
+      
+    - name: Push to Dockerhub
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
+      run: docker push ${DOCKER_USERNAME}/ieum-be:latest
