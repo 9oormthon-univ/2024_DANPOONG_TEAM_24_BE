@@ -16,8 +16,11 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
+    disable-swagger-default-url: true
     path: /swagger-ui.html
-    
+  show-actuator: true
+  default-produces-media-type: application/json
+
 ---
 spring:
   config:
