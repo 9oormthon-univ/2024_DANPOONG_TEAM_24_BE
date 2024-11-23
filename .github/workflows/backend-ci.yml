@@ -17,9 +17,8 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKERHUB_PASSWORD}}
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD     
       
-    - name: Switch to be branch
+    - name: Pull main branch
       run: |
-        git fetch --all
         git pull origin main
     - name: Build the Docker image
       run: docker build -t ieum-be .
