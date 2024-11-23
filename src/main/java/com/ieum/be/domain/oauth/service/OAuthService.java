@@ -117,6 +117,11 @@ public class OAuthService {
         User user = this.userRepository.findUserByEmail(email).orElse(null);
 
         if (user != null) {
+            user.setName(nickname);
+            user.setProfileUrl(profileImageUrl);
+
+            this.userRepository.save(user);
+
             Map<String, String> claims = new HashMap<>();
             claims.put("email", email);
 

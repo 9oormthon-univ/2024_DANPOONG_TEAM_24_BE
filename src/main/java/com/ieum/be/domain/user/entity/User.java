@@ -19,6 +19,7 @@ public class User {
     private Long id;
 
     @Getter
+    @Setter
     @Column(name = "user_name")
     private String name;
 
@@ -27,6 +28,7 @@ public class User {
     private String email;
     
     @Getter
+    @Setter
     @Column(name = "profile_url")
     private String profileUrl;
 
