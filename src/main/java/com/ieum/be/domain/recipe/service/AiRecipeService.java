@@ -54,10 +54,10 @@ public class AiRecipeService {
         String prompt = buildPrompt(request, userText);  // 프롬프트 생성
         String generatedRecipe = callChatGptApi(prompt);  // API 호출
 
-        // 답변 내용을 문단별로 나누기
-        List<String> paragraphs = Arrays.asList(generatedRecipe.split("\n\n"));
+        List<String> paragraphs = Arrays.asList(generatedRecipe.split("\n\n")); // 답변 내용 나눠보내기
+        String koreanKeyword = KeywordMapper.getDisplayValue(request.getValue().get(2).getValue().toString()); // 키워드 보내기
 
-        return new AiRecipeResponseDto(paragraphs); // 리스트로 반환
+        return new AiRecipeResponseDto(paragraphs, koreanKeyword); // 리스트로 반환
     }
 
     // API 호출
