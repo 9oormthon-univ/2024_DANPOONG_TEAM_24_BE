@@ -8,6 +8,12 @@ import java.util.List;
 @Getter
 @Setter
 public class AiRecipeRequestDto {
-    private List<OptionDto> value;  // OptionDto 리스트로 간소화
+    private String display;
+    private List<OptionDto> value;
+
+    public AiRecipeRequestDto(String display, List<OptionDto> value) {
+        this.display = display;
+        this.value = value;
+    }
 }
 
