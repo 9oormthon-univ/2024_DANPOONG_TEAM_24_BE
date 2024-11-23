@@ -11,10 +11,10 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findPostById(Long postId);
-    List<Post> getPostsByUserEmail(String email);
-    List<Post> getAllByPostCategoryNotNull();
+    List<Post> getPostsByUserEmailOrderByCreatedAtDesc(String email);
+    List<Post> getAllByPostCategoryNotNullOrderByCreatedAtDesc();
     List<Post> getTop30ByOrderByCreatedAtDesc();
-    List<Post> getTop2ByOrderByLikesDesc();
-    List<Post> getTop30ByOrderByLikesDesc();
+    List<Post> getTop2ByOrderByLikesDescCreatedAtDesc();
+    List<Post> getTop30ByOrderByLikesDescCreatedAtDesc();
     List<Post> getPostByPostCategoryOrderByCreatedAtDesc(PostCategory postCategory);
 }
