@@ -35,15 +35,6 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @Nonnull HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        // 인증 없이 접근 가능한 경로인지 확인
-        String requestURI = request.getRequestURI();
-
-        if (requestURI.startsWith("/recipes/generate") || requestURI.startsWith("/recipes/options")) {
-            // 인증 없이 처리할 경로는 바로 필터 체인으로 넘김
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         String accessToken = resolveToken(request, response);
 
         if (accessToken == null) {
@@ -87,7 +78,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getServletPath().equals("/oauth");
+        return request.getServletPath().equals("/")
+                || request.getServletPath().equals("/oauth")
+                || request.getServletPath().equals("/health")
+                || request.getServletPath().equals("/recipes/options")
+                || request.getServletPath().equals("/recipes/generate")
+                || request.getServletPath().startsWith("/v3/api-docs")
+                || request.getServletPath().startsWith("/swagger-ui");
     }
 
     private void resolveException(GeneralResponse generalResponse, HttpServletResponse response) throws IOException {
