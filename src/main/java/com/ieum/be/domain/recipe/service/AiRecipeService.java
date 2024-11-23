@@ -10,6 +10,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AiRecipeService {
@@ -56,8 +58,14 @@ public class AiRecipeService {
     // API 호출
     private String callChatGptApi(String prompt) {
 
-        // 요청 준비
-        String requestBody = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"}, {\"role\": \"user\", \"content\": \"" + prompt + "\"}]}";
+        // 요청 데이터 생성
+        Map<String, Object> requestBody = Map.of(
+                "model", "gpt-3.5-turbo",
+                "messages", List.of(
+                        Map.of("role", "system", "content", "You are a helpful assistant."),
+                        Map.of("role", "user", "content", prompt)
+                )
+        );
 
         // OpenAI API 호출
         Mono<String> response = webClient.post()
@@ -83,18 +91,55 @@ public class AiRecipeService {
 
     // 프롬프트 생성
     private String buildPrompt(AiRecipeRequestDto request, String userText) {
-        StringBuilder prompt = new StringBuilder();
+
+        String prompt = String.format(
+                "편의점 %s에서 %s원으로 %s한 식사를 구성해주세요.%n%n" +
+                        "다음과 같은 형식으로 답변을 작성하세요:%n" +
+                        "1. 각 제품의 이름, 가격, 특징을 목록으로 제시%n" +
+                        "2. 총합 계산%n" +
+                        "3. 추천 식사 구성을 작성%n%n" +
+                        "예시:%n" +
+                        "1. 추천 제품 목록:%n" +
+                        "- 리얼프라이스 슬라이스 닭가슴살 갈릭맛 (2,300원): 부드럽고 촉촉한 닭가슴살%n" +
+                        "- 샐러드를 만드는 사람들 치킨 앤 에그 콥 샐러드 (4,100원): 신선한 채소와 단백질%n" +
+                        "- 리얼프라이스 플레인 요거트 (1,500원): 무가당 플레인 요거트%n" +
+                        "2. 총합: 7,900원%n" +
+                        "3. 추천 구성: 닭가슴살과 샐러드를 조합해 메인 식사를, 요거트를 디저트로 구성%n%n",
+                request.getValue().get(1).getValue(),
+                request.getValue().get(0).getValue(),
+                request.getValue().get(2).getValue()
+        );
+
+        // 추가 사용자 입력 추가
+        if (Optional.ofNullable(userText).filter(text -> !text.isEmpty()).isPresent()) {
+            prompt += "추가 참고 사항: " + userText;
+        }
+
+        return prompt;
+
+        /*StringBuilder prompt = new StringBuilder();
 
         // Option 추출해 넣기
-        prompt.append("금액 ").append(request.getValue().get(0).getValue()).append("원으로, ");
-        prompt.append("편의점 ").append(request.getValue().get(1).getValue()).append("에서의 ");
-        prompt.append("키워드 ").append(request.getValue().get(2).getValue()).append(" 관련 식사를 구성해주세요. ");
+        prompt.append("편의점 ").append(request.getValue().get(1).getValue())
+                .append("에서 ").append(request.getValue().get(0).getValue()).append("원으로 ")
+                .append(request.getValue().get(2).getValue()).append("한 식사를 구성해주세요.\n\n");
+        prompt.append("다음과 같은 형식으로 답변을 작성하세요:\n");
+        prompt.append("1. 각 제품의 이름, 가격, 특징을 목록으로 제시\n");
+        prompt.append("2. 총합 계산\n");
+        prompt.append("3. 추천 식사 구성을 작성\n\n");
+        prompt.append("예시:\n");
+        prompt.append("1. 추천 제품 목록:\n");
+        prompt.append("- 리얼프라이스 슬라이스 닭가슴살 갈릭맛 (2,300원): 부드럽고 촉촉한 닭가슴살\n");
+        prompt.append("- 샐러드를 만드는 사람들 치킨 앤 에그 콥 샐러드 (4,100원): 신선한 채소와 단백질\n");
+        prompt.append("- 리얼프라이스 플레인 요거트 (1,500원): 무가당 플레인 요거트\n");
+        prompt.append("2. 총합: 7,900원\n");
+        prompt.append("3. 추천 구성: 닭가슴살과 샐러드를 조합해 메인 식사를, 요거트를 디저트로 구성\n\n");
 
         // Text도 선택적으로 추가
         if (userText != null && !userText.isEmpty()) {
-            prompt.append("추가적으로 다음 내용도 참고해주세요. ").append(userText);
+            prompt.append("추가 참고 사항: ").append(userText);
         }
 
-        return prompt.toString();
+        return prompt.toString();*/
     }
 }
