@@ -191,7 +191,7 @@ public class StoreService {
             stores = storeRepository.findByScoreAndDistance(4, latitude, longitude, 1000);
         } else {
             // 옵션이 없을 경우, 모든 반경 1km 내의 식당 반환
-            stores = storeRepository.findStoresByDistance(latitude, longitude, 1000);
+            stores = storeRepository.findStoresByDistance(latitude, longitude, 2000);
         }
 
         return stores.stream()
