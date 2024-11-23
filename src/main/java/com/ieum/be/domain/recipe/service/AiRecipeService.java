@@ -56,8 +56,9 @@ public class AiRecipeService {
 
         List<String> paragraphs = Arrays.asList(generatedRecipe.split("\n\n")); // 답변 내용 나눠보내기
         String koreanKeyword = KeywordMapper.getDisplayValue(request.getValue().get(2).getValue().toString()); // 키워드 보내기
-
-        return new AiRecipeResponseDto(paragraphs, koreanKeyword); // 리스트로 반환
+        String selectedConvenienceStore = request.getValue().get(1).getValue().toString(); // 편의점 보내기
+        String selectedCost = request.getValue().get(0).getValue().toString(); // 가격범위 보내기
+        return new AiRecipeResponseDto(paragraphs, selectedCost, selectedConvenienceStore, koreanKeyword); // 리스트로 반환
     }
 
     // API 호출
