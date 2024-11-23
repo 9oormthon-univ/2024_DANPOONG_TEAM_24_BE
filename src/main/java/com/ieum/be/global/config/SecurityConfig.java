@@ -37,9 +37,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> {
                     request
                             .requestMatchers("/", "/health").permitAll()
-                            .requestMatchers("/v3/api-docs", "/swagger-ui.html").permitAll()
                             .requestMatchers("/oauth").permitAll()
                             .requestMatchers("/recipes/options", "/recipes/generate").permitAll()
+                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .addFilterBefore(jwtfilter, UsernamePasswordAuthenticationFilter.class);
