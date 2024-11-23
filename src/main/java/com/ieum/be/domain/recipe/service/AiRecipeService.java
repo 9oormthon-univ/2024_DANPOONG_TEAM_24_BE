@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 
 @Service
 public class AiRecipeService {
@@ -52,7 +53,11 @@ public class AiRecipeService {
     public AiRecipeResponseDto generateAiRecipe(AiRecipeRequestDto request, String userText) {
         String prompt = buildPrompt(request, userText);  // 프롬프트 생성
         String generatedRecipe = callChatGptApi(prompt);  // API 호출
-        return new AiRecipeResponseDto(generatedRecipe);
+
+        // 답변 내용을 문단별로 나누기
+        List<String> paragraphs = Arrays.asList(generatedRecipe.split("\n\n"));
+
+        return new AiRecipeResponseDto(paragraphs); // 리스트로 반환
     }
 
     // API 호출
