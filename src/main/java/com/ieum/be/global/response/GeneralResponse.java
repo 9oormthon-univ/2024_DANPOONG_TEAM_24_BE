@@ -27,6 +27,7 @@ public enum GeneralResponse {
     POST_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Post not found"),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Comment not found"),
     POST_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Post category not found"),
+    LOCATION_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Location not found"),
 
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT.value(), "User already exists"),
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST.value(), "Wrong password"),

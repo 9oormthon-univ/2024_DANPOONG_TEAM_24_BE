@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -21,13 +22,23 @@ public class UserController {
     }
 
     @GetMapping("/location")
-    public UserLocationDto getUserLocation(Principal principal) {
+    public List<UserLocationDto> getUserLocation(Principal principal) {
         return this.userService.getUserLocation(principal.getName());
     }
 
+    @PostMapping("/location")
+    public GeneralResponse createUserLocation(@Valid @RequestBody UserLocationDto createUserLocationDto, Principal principal) {
+        return this.userService.createUserLocation(createUserLocationDto, principal.getName());
+    }
+
     @PatchMapping("/location")
-    public GeneralResponse updateUserLocation(@Valid @RequestBody UserLocationDto updateLocationDto, Principal principal) {
-        return this.userService.updateUserLocation(updateLocationDto, principal.getName());
+    public GeneralResponse updateUserLocation(@RequestParam Integer id, Principal principal) {
+        return this.userService.updateUserLocation(Long.valueOf(id), principal.getName());
+    }
+
+    @DeleteMapping("/location")
+    public GeneralResponse deleteUserLocation(@RequestParam Long id, Principal principal) {
+        return this.userService.deleteLocation(id, principal.getName());
     }
 
     @GetMapping("/info")

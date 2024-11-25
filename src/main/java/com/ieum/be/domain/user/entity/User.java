@@ -32,16 +32,6 @@ public class User {
     @Column(name = "profile_url")
     private String profileUrl;
 
-    @Getter
-    @Setter
-    @Column(name = "latitude")
-    private Double latitude;
-
-    @Getter
-    @Setter
-    @Column(name = "longitude")
-    private Double longitude;
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Post> posts;
 
@@ -50,4 +40,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Likes> likes;
+
+    @Getter
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Location> locations;
 }
