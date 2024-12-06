@@ -10,9 +10,6 @@ public class RecipeDto {
     private String recipeName;
     private String description;
 
-    public RecipeDto() {
-    }
-
     public RecipeDto(Integer recipeId, String recipeName, String description) {
         this.recipeId = recipeId;
         this.recipeName = recipeName;

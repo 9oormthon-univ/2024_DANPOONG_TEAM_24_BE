@@ -1,13 +1,9 @@
 package com.ieum.be.domain.store.entity;
 
 import com.ieum.be.domain.category.entity.Category;
-import com.ieum.be.domain.filteredStore.entity.FilteredStore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -50,9 +46,6 @@ public class Store {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FilteredStore> filteredStores = new ArrayList<>();
 
     public Store(String storeName, String roadAddress, String phone, Float latitude, Float longitude, Float score, String imageUrl, Category category) {
         this.storeName = storeName;

@@ -9,9 +9,6 @@ public class CategoryDto {
     private Integer categoryId;
     private String categoryName;
 
-    public CategoryDto() {
-    }
-
     public CategoryDto(Integer categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
