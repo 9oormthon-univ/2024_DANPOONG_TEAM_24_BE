@@ -1,12 +1,12 @@
 spring:
   jpa:
     database: mysql
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: ${DDL_MODE}
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?serverTimezone=UTC&useSSL=false
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?serverTimezone=UTC&useSSL=true
     username: ${DB_USER}
     password: ${DB_PASSWORD}

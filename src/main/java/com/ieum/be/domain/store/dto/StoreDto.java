@@ -14,8 +14,9 @@ public class StoreDto {
     private String phone;
     private String imageUrl;
     private String kakaoMapUrl;
+    private String averagePrice;
 
-    public StoreDto(Integer storeId, String storeName, String roadAddress, Float latitude, Float longitude, String phone, String imageUrl, String kakaoMapUrl) {
+    public StoreDto(Integer storeId, String storeName, String roadAddress, Float latitude, Float longitude, String phone, String imageUrl, String kakaoMapUrl, Long averagePrice) {
         this.storeId = storeId;
         this.storeName = storeName;
         this.roadAddress = roadAddress;
@@ -24,6 +25,8 @@ public class StoreDto {
         this.phone = phone;
         this.imageUrl = imageUrl;
         this.kakaoMapUrl = kakaoMapUrl;
+        this.averagePrice = averagePrice == null ? "가격 정보 미제공" : averagePrice + "원";
+
     }
 }
 

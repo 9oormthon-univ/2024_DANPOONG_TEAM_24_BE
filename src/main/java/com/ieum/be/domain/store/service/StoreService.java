@@ -162,7 +162,8 @@ public class StoreService {
                 store.getRoadAddress(),
                 store.getPhone(),
                 store.getImageUrl(),
-                store.getScore());
+                store.getScore(),
+                store.getAveragePrice());
     }
 
     // 반경 1km 내 카테고리별 식당 반환
@@ -177,7 +178,8 @@ public class StoreService {
                         store.getLongitude(),
                         store.getPhone(),
                         store.getImageUrl(),
-                        store.getKakaoMapUrl()
+                        store.getKakaoMapUrl(),
+                        store.getAveragePrice()
                 ))
                 .toList();
     }
@@ -203,7 +205,8 @@ public class StoreService {
                         store.getLongitude(),
                         store.getPhone(),
                         store.getImageUrl(),
-                        store.getKakaoMapUrl()
+                        store.getKakaoMapUrl(),
+                        store.getAveragePrice()
                 ))
                 .collect(Collectors.toList());
     }

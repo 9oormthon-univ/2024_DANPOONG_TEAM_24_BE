@@ -177,8 +177,6 @@ public class PostService {
 
                             return false;
                         }).toList();
-
-                System.out.println(posts);
             }
 
             default -> throw new GlobalException(GeneralResponse.FORBIDDEN);

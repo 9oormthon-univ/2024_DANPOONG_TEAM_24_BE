@@ -44,6 +44,9 @@ public class Store {
     @Column(name = "kakao_map_url")
     private String kakaoMapUrl;
 
+    @Column(name = "average_price")
+    private Long averagePrice;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;

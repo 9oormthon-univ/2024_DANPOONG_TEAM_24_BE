@@ -46,8 +46,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
             String email = claims.getPayload().get("email", String.class);
 
-            System.out.println(email);
-
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
 
