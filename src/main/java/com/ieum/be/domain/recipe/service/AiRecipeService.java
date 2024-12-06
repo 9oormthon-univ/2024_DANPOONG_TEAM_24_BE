@@ -104,9 +104,6 @@ public class AiRecipeService {
         // 키워드 매핑
         String displayKeyword = KeywordMapper.getDisplayValue(insertedKeyword);
 
-        System.out.println("User Text: " + userText);
-        System.out.println("Display Keyword: " + displayKeyword);
-
         String prompt = String.format(
                 "편의점 %s에서 %s원으로 %s를 만족하는 맛있는 식사를 구성해주세요.%n%n" +
                         "다음 내용을 반드시 포함하여 한국어로 답변을 작성하세요:%n" +

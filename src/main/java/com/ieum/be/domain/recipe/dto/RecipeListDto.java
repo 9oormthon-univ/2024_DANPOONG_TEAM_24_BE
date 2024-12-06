@@ -12,9 +12,6 @@ public class RecipeListDto {
     private String imageUrl;
     private String videoUrl;
 
-    public RecipeListDto() {
-    }
-
     public RecipeListDto(Integer recipeId, String recipeName, String description, String imageUrl, String videoUrl) {
         this.recipeId = recipeId;
         this.recipeName = recipeName;
